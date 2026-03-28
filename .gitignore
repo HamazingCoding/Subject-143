@@ -1,0 +1,19 @@
+# Unity generated
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Ll]ogs/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+
+# Build outputs
+[Bb]uild/
+[Bb]uilds/
+
+# Visual Studio
+.vs/
+*.csproj
+*.sln
+
+# User-specific
+[Uu]ser[Ss]ettings/
