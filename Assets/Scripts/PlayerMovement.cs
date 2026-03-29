@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     private PlayerInputActions inputActions;
+    public Animator animator;
+    public Rigidbody rb;
 
     public CharacterController controller;
     public Transform cameraTransform;
@@ -16,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     public float maxChargeTime = 1.2f;
     public float launchForce = 20f;
     public float upwardLaunchForce = 12f;
+    public float maxSpeed = 45f;
 
     private float currentCharge;
     private bool isCharging;
@@ -75,8 +78,35 @@ public class PlayerMovement : MonoBehaviour
         inputActions.Disable();
     }
 
+
+    void FixedUpdate()
+    {
+        
+    }
+
     void Update()
     {
+        Vector3 horizontalVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+        float speed = horizontalVelocity.magnitude;
+
+        // Clamp tiny movement to zero (fix idle issue)
+        if (speed < 1f)
+            speed = 0f;
+
+        // Normalize speed
+        float normalizedSpeed = speed / maxSpeed;
+
+        float dampTime = (normalizedSpeed > animator.GetFloat("Speed")) ? 0.1f : 0.02f;
+        animator.SetFloat("Speed", normalizedSpeed, dampTime, Time.deltaTime);
+        if (normalizedSpeed < 0.1f)
+        {
+            animator.SetFloat("Speed", 0f);
+        }
+
+        animator.speed = Mathf.Lerp(1f, 1.3f, normalizedSpeed);
+
+        Debug.Log(rb.linearVelocity.magnitude);
+
         if (isSprinting && !wasSprintingLastFrame)
         {
             currentSpeed *= sprintBurstMultiplier;
@@ -200,31 +230,41 @@ public class PlayerMovement : MonoBehaviour
 
     void PerformLaunch(float chargePercent)
     {
-        Vector3 inputDirection = cameraTransform.forward;
+        // 1. Get directional input
+        Vector3 inputDirection = cameraTransform.forward * moveInput.y 
+                               + cameraTransform.right * moveInput.x;
+
+        // 2. Flatten it (no vertical influence)
         inputDirection.y = 0f;
+
+        // 3. 🔥 HANDLE "NO INPUT" CASE (PUT IT HERE)
+        if (inputDirection.magnitude < 0.1f)
+        {
+            inputDirection = cameraTransform.forward;
+            inputDirection.y = 0f;
+        }
+
+        // 4. Normalize AFTER fixing direction
         inputDirection.Normalize();
 
-        float sprintMultiplier = isSprinting ? 1.5f : 1f;
+        // 5. Apply forces (your existing logic)
+        float forwardForce;
+        float upwardForce;
 
         if (isSprinting)
         {
-            // LONG JUMP (aggressive forward motion)
-
-            Vector3 force = inputDirection * (launchForce * chargePercent * sprintMultiplier);
-
-            velocity.y = upwardLaunchForce * 0.8f * chargePercent * sprintMultiplier;
-
-            airVelocity = force;
+            forwardForce = launchForce * (1f + chargePercent * 1.5f);
+            upwardForce = upwardLaunchForce * (0.6f + chargePercent * 0.6f);
         }
         else
         {
-            // CONTROLLED JUMP (more vertical, less forward)
-
-            Vector3 force = inputDirection * (launchForce * 0.5f * chargePercent);
-
-            velocity.y = upwardLaunchForce * chargePercent;
-
-            airVelocity = force;
+            forwardForce = launchForce * (0.6f + chargePercent);
+            upwardForce = upwardLaunchForce * (0.8f + chargePercent * 0.5f);
         }
+
+        airVelocity = inputDirection * forwardForce;
+        velocity.y = upwardForce;
+
+        velocity.y += 1.5f;
     }
 }
