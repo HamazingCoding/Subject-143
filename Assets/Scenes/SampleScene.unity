@@ -3853,9 +3853,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MouseLook
   playerBody: {fileID: 1421453239}
   cameraPivot: {fileID: 528311876}
+  sensitivity: 1
   rotationSmoothTime: 0.05
   sprintRotationSmoothTime: 0.12
-  sensitivity: 80
+  verticalClamp: 60
 --- !u!114 &1062205509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4594,6 +4595,7 @@ MonoBehaviour:
   maxChargeTime: 1.2
   launchForce: 3000
   upwardLaunchForce: 20
+  maxSpeed: 45
   walkSpeed: 2
   runSpeed: 5
   sprintSpeed: 10

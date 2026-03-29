@@ -3,79 +3,72 @@ using UnityEngine.InputSystem;
 
 public class MouseLookNew : MonoBehaviour
 {
+    [Header("References")]
     public Transform playerBody;     // rotates left/right
     public Transform cameraPivot;    // rotates up/down
-    float currentYaw;
-    private PlayerMovement playerMovement;
-    float yawVelocity;
-    public float rotationSmoothTime = 0.03f;
-    public float sprintRotationSmoothTime = 0.08f;
 
-
+    [Header("Settings")]
     public float sensitivity = 100f;
+    // public float rotationSmoothTime = 0.03f;        // Disabled for now
+    // public float sprintRotationSmoothTime = 0.08f;  // Disabled for now
+    public float verticalClamp = 60f;
 
     private PlayerInputActions inputActions;
+    private PlayerMovement playerMovement;
+
     private Vector2 lookInput;
-
-    float xRotation = 0f;
-
-    public void AddCameraKick(float strength)
-    {
-        xRotation -= strength;
-    }
+    private float xRotation = 0f;
+    private float currentYaw;
 
     void Awake()
     {
         inputActions = new PlayerInputActions();
-
         inputActions.Player.Look.performed += ctx => lookInput = ctx.ReadValue<Vector2>();
         inputActions.Player.Look.canceled += ctx => lookInput = Vector2.zero;
     }
 
-    void OnEnable()
-    {
-        inputActions.Enable();
-    }
-
-    void OnDisable()
-    {
-        inputActions.Disable();
-    }
+    void OnEnable() => inputActions.Enable();
+    void OnDisable() => inputActions.Disable();
 
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-
         playerMovement = GetComponentInParent<PlayerMovement>();
-
         currentYaw = playerBody.eulerAngles.y;
     }
 
     void Update()
     {
-        float mouseX = lookInput.x * sensitivity * Time.deltaTime;
-        float mouseY = lookInput.y * sensitivity * Time.deltaTime;
+        HandleLook();
+    }
 
-        // Vertical (camera pivot)
+    void HandleLook()
+    {
+        // --- Mouse input (no Time.deltaTime) ---
+        float mouseX = lookInput.x * sensitivity;
+        float mouseY = lookInput.y * sensitivity;
+
+        // --- Vertical rotation (camera pivot) ---
         xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -60f, 60f);
-
+        xRotation = Mathf.Clamp(xRotation, -verticalClamp, verticalClamp);
         cameraPivot.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
 
-        // Horizontal (player rotation)
-        float targetYaw = currentYaw + mouseX;
+        // --- Horizontal rotation (player) ---
+        currentYaw += mouseX;
 
-        float smoothTime = playerMovement.IsSprinting()
-            ? sprintRotationSmoothTime
-            : rotationSmoothTime;
-
-        currentYaw = Mathf.SmoothDampAngle(
-            currentYaw,
-            targetYaw,
-            ref yawVelocity,
-            smoothTime
-        );
+        // Smooth rotation is commented out for now to remove choppiness
+        // float targetYaw = currentYaw + mouseX;
+        // float smoothTime = playerMovement != null && playerMovement.IsSprinting()
+        //     ? sprintRotationSmoothTime
+        //     : rotationSmoothTime;
+        // currentYaw = Mathf.SmoothDampAngle(currentYaw, targetYaw, ref yawVelocity, smoothTime);
 
         playerBody.rotation = Quaternion.Euler(0f, currentYaw, 0f);
+    }
+
+    // Optional: Camera kick for impacts or recoil
+    public void AddCameraKick(float strength)
+    {
+        xRotation -= strength;
     }
 }

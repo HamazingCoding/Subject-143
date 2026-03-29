@@ -89,29 +89,64 @@ public class PlayerMovement : MonoBehaviour
         Vector3 horizontalVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
         float speed = horizontalVelocity.magnitude;
 
-        // Clamp tiny movement to zero (fix idle issue)
+        // Clamp tiny movement
         if (speed < 1f)
             speed = 0f;
 
         // Normalize speed
+        float inputMagnitude = moveInput.magnitude;
         float normalizedSpeed = speed / maxSpeed;
 
+        // Input-based drop (fix slow stopping)
+        if (inputMagnitude < 0.1f)
+        {
+            normalizedSpeed = Mathf.Lerp(normalizedSpeed, 0f, 10f * Time.deltaTime);
+        }
+
+        // Convert velocity to local space
+        Vector3 localVelocity = transform.InverseTransformDirection(horizontalVelocity);
+
+        // Raw direction
+        float moveX = localVelocity.x / maxSpeed;
+        float moveZ = localVelocity.z / maxSpeed;
+
+        // --- SMOOTHING (comes BEFORE kill zone) ---
+        Vector2 currentDir = new Vector2(
+            animator.GetFloat("MoveX"),
+            animator.GetFloat("MoveZ")
+        );
+
+        Vector2 targetDir = new Vector2(moveX, moveZ);
+
+        Vector2 smoothedDir = Vector2.Lerp(currentDir, targetDir, 10f * Time.deltaTime);
+
+        moveX = smoothedDir.x;
+        moveZ = smoothedDir.y;
+
+        // --- KILL ZONE (comes AFTER smoothing) ---
+        float directionMagnitude = new Vector2(moveX, moveZ).magnitude;
+
+        if (normalizedSpeed < 0.1f || directionMagnitude < 0.1f)
+        {
+            moveX = 0f;
+            moveZ = 0f;
+        }
+
+        // --- SEND TO ANIMATOR (ONLY ONCE) ---
+        animator.SetFloat("MoveX", moveX, 0.1f, Time.deltaTime);
+        animator.SetFloat("MoveZ", moveZ, 0.1f, Time.deltaTime);
+
+        // Speed damping
         float dampTime = (normalizedSpeed > animator.GetFloat("Speed")) ? 0.1f : 0.02f;
         animator.SetFloat("Speed", normalizedSpeed, dampTime, Time.deltaTime);
+
         if (normalizedSpeed < 0.1f)
         {
             animator.SetFloat("Speed", 0f);
         }
 
+        // Animation playback speed
         animator.speed = Mathf.Lerp(1f, 1.3f, normalizedSpeed);
-
-        Debug.Log(rb.linearVelocity.magnitude);
-
-        if (isSprinting && !wasSprintingLastFrame)
-        {
-            currentSpeed *= sprintBurstMultiplier;
-        }
-        wasSprintingLastFrame = isSprinting;
         // Direction
         Vector3 targetDirection = cameraTransform.forward * moveInput.y + cameraTransform.right * moveInput.x;
         targetDirection.y = 0f;
@@ -182,6 +217,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     // normal jump
                     velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                    animator.SetTrigger("jumpTrigger");
                 }
 
                 isCharging = false;
@@ -220,6 +256,9 @@ public class PlayerMovement : MonoBehaviour
         // Combine with gravity
         Vector3 finalMove = horizontalMove;
         finalMove.y = velocity.y;
+
+        animator.SetBool("isGrounded", isGrounded);
+        animator.SetFloat("verticalVelocity", velocity.y);
 
         controller.Move(finalMove * Time.deltaTime);
     }
@@ -264,6 +303,8 @@ public class PlayerMovement : MonoBehaviour
 
         airVelocity = inputDirection * forwardForce;
         velocity.y = upwardForce;
+
+        animator.SetTrigger("jumpTrigger");
 
         velocity.y += 1.5f;
     }
