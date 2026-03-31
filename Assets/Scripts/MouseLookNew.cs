@@ -62,7 +62,7 @@ public class MouseLookNew : MonoBehaviour
         lastYaw = currentYaw;
 
         // Normalize
-        float turnNormalized = Mathf.Clamp(turnVelocity / 120f, -1f, 1f);
+        float turnNormalized = Mathf.Clamp(turnVelocity / 0.5f, -1f, 1f);
 
         // Get movement state from PlayerMovement
         bool isMoving = playerMovement != null && playerMovement.GetMoveInput().magnitude > 0.1f;

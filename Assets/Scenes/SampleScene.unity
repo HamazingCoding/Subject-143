@@ -4019,6 +4019,7 @@ MonoBehaviour:
   cameraPivot: {fileID: 528311876}
   sensitivity: 1
   verticalClamp: 60
+  animator: {fileID: 0}
 --- !u!114 &1062205509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4839,8 +4840,8 @@ MonoBehaviour:
   launchForce: 3000
   upwardLaunchForce: 20
   maxSpeed: 45
-  walkSpeed: 3
-  runSpeed: 6
+  walkSpeed: 2.5
+  runSpeed: 5
   sprintSpeed: 10
   accelerationTime: 0.2
   sprintAccelerationTime: 0.05
