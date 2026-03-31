@@ -84,6 +84,30 @@ public class PlayerMovement : MonoBehaviour
         
     }
 
+    public bool IsMoving()
+    {
+        Vector3 horizontalVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+        return horizontalVelocity.magnitude > 0.1f;
+    }
+
+    public bool IsGrounded()
+    {
+        return Physics.Raycast(transform.position, Vector3.down, 1.1f);
+    }
+
+    public void DoJump()
+    {
+        if (IsGrounded())
+        {
+            rb.AddForce(Vector3.up * launchForce, ForceMode.Impulse);
+        }
+    }
+
+    public Vector3 GetVelocity()
+    {
+        return rb.linearVelocity;
+    }
+
     void Update()
     {
         Vector3 horizontalVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
@@ -97,18 +121,45 @@ public class PlayerMovement : MonoBehaviour
         float inputMagnitude = moveInput.magnitude;
         float normalizedSpeed = speed / maxSpeed;
 
-        // Input-based drop (fix slow stopping)
-        if (inputMagnitude < 0.1f)
+        // --- INPUT-BASED ANIMATION TIERS ---
+
+        if (moveInput.magnitude > 0.1f)
         {
-            normalizedSpeed = Mathf.Lerp(normalizedSpeed, 0f, 10f * Time.deltaTime);
+            if (isSprinting)
+            {
+                normalizedSpeed = Mathf.Max(normalizedSpeed, 0.75f); // sprint zone
+            }
+            else if (!isWalking)
+            {
+                normalizedSpeed = Mathf.Max(normalizedSpeed, 0.45f); // run zone
+            }
+            else
+            {
+                normalizedSpeed = Mathf.Max(normalizedSpeed, 0.2f); // walk zone
+            }
         }
 
-        // Convert velocity to local space
-        Vector3 localVelocity = transform.InverseTransformDirection(horizontalVelocity);
+        if (moveInput.magnitude > 0.1f && normalizedSpeed < 0.1f)
+        {
+            normalizedSpeed = 0.2f; // instantly trigger movement animation
+        }
 
-        // Raw direction
-        float moveX = localVelocity.x / maxSpeed;
-        float moveZ = localVelocity.z / maxSpeed;
+        // Input-based drop (fix slow stopping)
+        if (moveInput.magnitude < 0.1f)
+        {
+            normalizedSpeed = 0f;
+        }
+
+        // Use INPUT instead of velocity for direction
+        Vector3 inputDir = new Vector3(moveInput.x, 0, moveInput.y);
+
+        // Convert to local space (relative to character)
+        Vector3 localInput = transform.InverseTransformDirection(
+            cameraTransform.forward * inputDir.z + cameraTransform.right * inputDir.x
+        );
+
+        float moveX = localInput.x;
+        float moveZ = localInput.z;
 
         // --- SMOOTHING (comes BEFORE kill zone) ---
         Vector2 currentDir = new Vector2(
@@ -118,7 +169,7 @@ public class PlayerMovement : MonoBehaviour
 
         Vector2 targetDir = new Vector2(moveX, moveZ);
 
-        Vector2 smoothedDir = Vector2.Lerp(currentDir, targetDir, 10f * Time.deltaTime);
+        Vector2 smoothedDir = Vector2.Lerp(currentDir, targetDir, 20f * Time.deltaTime);
 
         moveX = smoothedDir.x;
         moveZ = smoothedDir.y;
@@ -265,6 +316,11 @@ public class PlayerMovement : MonoBehaviour
     public bool IsSprinting()
     {
         return isSprinting;
+    }
+
+    public Vector2 GetMoveInput()
+    {
+        return moveInput;
     }
 
     void PerformLaunch(float chargePercent)

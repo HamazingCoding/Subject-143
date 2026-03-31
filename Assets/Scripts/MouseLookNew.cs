@@ -19,6 +19,9 @@ public class MouseLookNew : MonoBehaviour
     private Vector2 lookInput;
     private float xRotation = 0f;
     private float currentYaw;
+    public Animator animator;
+    private float turnVelocity;
+    private float lastYaw;
 
     void Awake()
     {
@@ -34,12 +37,45 @@ public class MouseLookNew : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         playerMovement = GetComponentInParent<PlayerMovement>();
+        
+        animator = GameObject.Find("Player/Visual/HumanCharacterDummy_M").GetComponent<Animator>();
+
+        if (animator == null)
+            Debug.LogError("Animator not found! Check hierarchy and name.");
+
         currentYaw = playerBody.eulerAngles.y;
+        lastYaw = playerBody.eulerAngles.y;
     }
 
     void Update()
     {
         HandleLook();
+        
+        // --- TURN DETECTION --- //
+        float currentYaw = playerBody.eulerAngles.y;
+
+        float delta = Mathf.DeltaAngle(lastYaw, currentYaw);
+
+        // Smooth it
+        turnVelocity = Mathf.Lerp(turnVelocity, delta, Time.deltaTime * 10f);
+
+        lastYaw = currentYaw;
+
+        // Normalize
+        float turnNormalized = Mathf.Clamp(turnVelocity / 120f, -1f, 1f);
+
+        // Get movement state from PlayerMovement
+        bool isMoving = playerMovement != null && playerMovement.GetMoveInput().magnitude > 0.1f;
+
+        // Apply to animator
+        if (!isMoving)
+        {
+            animator.SetFloat("Turn", turnNormalized);
+        }
+        else
+        {
+            animator.SetFloat("Turn", 0f);
+        }
     }
 
     void HandleLook()
