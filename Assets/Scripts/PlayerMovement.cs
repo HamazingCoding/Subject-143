@@ -110,6 +110,17 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (isSprinting)
+        {
+            isWalking = false;
+        }
+
+        // 🔥 REQUIRE FORWARD INPUT TO SPRINT
+        if (isSprinting && moveInput.y < 0f)
+        {
+            isSprinting = false;
+        }
+
         Vector3 horizontalVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
         float speed = horizontalVelocity.magnitude;
 
@@ -151,7 +162,16 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Use INPUT instead of velocity for direction
-        Vector3 inputDir = new Vector3(moveInput.x, 0, moveInput.y);
+        Vector2 processedInput = moveInput;
+
+        // 🔥 BLOCK BACKWARD + LIMIT STRAFE DURING SPRINT
+        if (isSprinting)
+        {
+            processedInput.y = Mathf.Max(0f, processedInput.y); // no backward
+            processedInput.x *= 0.5f; // optional: reduce side movement
+        }
+
+        Vector3 inputDir = new Vector3(processedInput.x, 0, processedInput.y);
 
         // Convert to local space (relative to character)
         Vector3 localInput = transform.InverseTransformDirection(
@@ -199,7 +219,7 @@ public class PlayerMovement : MonoBehaviour
         // Animation playback speed
         animator.speed = Mathf.Lerp(1f, 1.3f, normalizedSpeed);
         // Direction
-        Vector3 targetDirection = cameraTransform.forward * moveInput.y + cameraTransform.right * moveInput.x;
+        Vector3 targetDirection = cameraTransform.forward * processedInput.y + cameraTransform.right * processedInput.x;
         targetDirection.y = 0f;
 
         targetDirection.Normalize();
