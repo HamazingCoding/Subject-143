@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public abstract class EnvironmentInteractionState 
     : BaseState<EnvironmentInteractionStateMachine.EEnvironmentInteractionState>
@@ -94,8 +94,19 @@ public abstract class EnvironmentInteractionState
 
     protected bool ShouldReset()
     {
+        // If we lost the collider AFTER already interacting,
+        // force a reset so the hand returns to idle.
         if (ctx.CurrentIntersectingCollider == null)
+        {
+            // Were we previously interacting?
+            if (ctx.LowestDistance != Mathf.Infinity)
+            {
+                ctx.LowestDistance = Mathf.Infinity;
+                return true;
+            }
+
             return false;
+        }
 
         float dist = Vector3.Distance(ctx.Root.position, ctx.ClosestPoint);
 
