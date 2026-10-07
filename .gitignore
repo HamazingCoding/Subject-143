@@ -17,3 +17,6 @@
 
 # User-specific
 [Uu]ser[Ss]ettings/
+# Nightfarer experiment: local-only reference assets (never committed)
+Assets/Nightfarer/Experimental/ReferenceAssets/
+Assets/Nightfarer/Experimental/ReferenceAssets.meta

@@ -12,7 +12,8 @@ public class SearchState : EnvironmentInteractionState
     {
         if (ShouldReset()) return EnvironmentInteractionStateMachine.EEnvironmentInteractionState.Reset;
 
-        if (ctx.ClosestPoint != Vector3.positiveInfinity &&
+        if (ctx.CurrentIntersectingCollider != null &&
+            !float.IsInfinity(ctx.ClosestPoint.x) &&
             Vector3.Distance(ctx.Root.position, ctx.ClosestPoint) < 2f)
             return EnvironmentInteractionStateMachine.EEnvironmentInteractionState.Approach;
 

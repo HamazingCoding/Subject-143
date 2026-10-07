@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e121436966ebc6c4bb8a7a909c5e70fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Subject143.Nightfarer::Subject143.Nightfarer.CharacterProfile
+  displayName: Subject 143 baseline feel
+  config: {fileID: 11400000, guid: e066d5d006a935a4d86f55f4240dc4c8, type: 2}
+  weapons:
+  - {fileID: 11400000, guid: 1ed5b8a492d1ebc4c8aacb3b5493b4de, type: 2}
+  - {fileID: 11400000, guid: 690a16365f477f24bbb2e694ef8f99d1, type: 2}
+  skill: {fileID: 11400000, guid: f73f09e025d0a624cbc28068429789a0, type: 2}
+  ultimate: {fileID: 11400000, guid: afead2dbc27277249a5b4968ad4aed0c, type: 2}
+  animationSet: {fileID: 11400000, guid: 16e1d79967a285a4da338e31e058be02, type: 2}

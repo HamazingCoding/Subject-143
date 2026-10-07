@@ -1,0 +1,118 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e8f4b160524e574aa5db29084a978e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Subject143.Nightfarer::Subject143.Nightfarer.NightfarerConfig
+  walkSpeed: 2
+  runSpeed: 5
+  sprintSpeed: 10
+  surgeSpeed: 10
+  lockedWalkSpeed: 1.8
+  lockedRunSpeed: 4.2
+  walkInputThreshold: 0.55
+  acceleration: 25
+  deceleration: 25
+  sprintAcceleration: 60
+  surgeAcceleration: 60
+  pivotAngle: 135
+  pivotDecelerationMultiplier: 1.6
+  turnSpeed: 540
+  sprintTurnSpeed: 300
+  lockedTurnSpeed: 720
+  airTurnSpeed: 180
+  sprintHoldThreshold: 0.25
+  sprintStaminaPerSecond: 12
+  surgeEnabled: 0
+  surgeEntryStaminaCost: 10
+  surgeBurstTime: 0.25
+  surgeJumpExtraStamina: 8
+  jumpHeight: 1.5
+  jumpStaminaCost: 4
+  gravity: -9.81
+  maxFallSpeed: -30
+  airAcceleration: 6
+  airMinSpeedFraction: 0.55
+  coyoteTime: 0.12
+  softLandRecovery: 0.12
+  hardLandFallHeight: 6
+  landRollDuration: 0.65
+  landRollDistance: 2.6
+  fallDamage: 0
+  rollDuration: 0.95
+  rollDistance: 3
+  rollIFrameStart: 0.08
+  rollIFrameEnd: 0.4
+  rollStaminaCost: 12
+  rollCancelTime: 0.75
+  rollMoveCancelTime: 0.85
+  rollAttackWindow: {x: 0.55, y: 1}
+  rollCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 2.2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.55
+      value: 0.88
+      inSlope: 0.9
+      outSlope: 0.9
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  backstepDuration: 0.52
+  backstepDistance: 1.7
+  backstepIFrameStart: 0.02
+  backstepIFrameEnd: 0.26
+  backstepStaminaCost: 8
+  backstepCancelTime: 0.4
+  backstepAttackWindow: {x: 0.3, y: 0.8}
+  maxStamina: 100
+  staminaRegen: 45
+  staminaRegenDelay: 0.55
+  staminaRegenDelayWhenEmpty: 1.2
+  maxHealth: 1000
+  flaskCharges: 3
+  flaskHealFraction: 0.45
+  flaskDuration: 0.95
+  flaskHealTime: 0.5
+  flaskMoveSpeedScale: 0.45
+  ultimateGaugeDamage: 700
+  mantleReach: 0.75
+  mantleMinHeight: 0.55
+  mantleMaxHeight: 2.4
+  mantleGroundMaxHeight: 1.6
+  mantleBaseDuration: 0.38
+  mantleDurationPerMetre: 0.12
+  inputBufferTime: 0.35
+  attackFriction: 30
+  hitReactDuration: 0.45
+  hitReactKnockback: 0.8

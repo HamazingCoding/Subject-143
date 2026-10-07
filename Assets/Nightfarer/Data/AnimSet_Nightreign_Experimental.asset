@@ -1,0 +1,105 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50d2dce1468e9ca43885f062eecaa25d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Subject143.Nightfarer::Subject143.Nightfarer.AnimationSet
+  displayName: Nightreign-inspired (experimental)
+  notes: Placeholder clips authored to Nightreign-style timing and posture (weapon-carry
+    locomotion, forward-lean surge sprint, wider swings). No Nightreign assets are
+    used. Drop reference or original clips into any slot to replace a placeholder.
+  entries:
+  - slot: Idle
+    clip: {fileID: 7400000, guid: 1f66db19ace5bfd489046e77e511f280, type: 2}
+  - slot: Walk_F
+    clip: {fileID: 7400000, guid: d74afa47a82c55341b12486ab0afbc39, type: 2}
+  - slot: Run_F
+    clip: {fileID: 7400000, guid: 9acb22d22dcc3b04f8ed4596c6e352d2, type: 2}
+  - slot: Walk_B
+    clip: {fileID: 7400000, guid: 244f28abda233f84c86531098cf937b5, type: 2}
+  - slot: Run_B
+    clip: {fileID: 7400000, guid: d3b5bc9137d147045934fd693a748bdd, type: 2}
+  - slot: Walk_L
+    clip: {fileID: 7400000, guid: 9503849bbf1949d43bab607566395166, type: 2}
+  - slot: Run_L
+    clip: {fileID: 7400000, guid: 795b06425c094ad4586dafbbf9382d08, type: 2}
+  - slot: Walk_R
+    clip: {fileID: 7400000, guid: d590bea73331d9140a9bfaacc80b0003, type: 2}
+  - slot: Run_R
+    clip: {fileID: 7400000, guid: dac2cf2f5c0d27642ad03f586b12fde0, type: 2}
+  - slot: Walk_FL
+    clip: {fileID: 7400000, guid: 72042087f40c7574b963281e25b94afd, type: 2}
+  - slot: Run_FL
+    clip: {fileID: 7400000, guid: 32d7a4460f6c48043b3d132380d42700, type: 2}
+  - slot: Walk_FR
+    clip: {fileID: 7400000, guid: 9b488b7a90e887842a651ed6c8db34a9, type: 2}
+  - slot: Run_FR
+    clip: {fileID: 7400000, guid: edff593a8f53ff04e8fb82a538e86225, type: 2}
+  - slot: Walk_BL
+    clip: {fileID: 7400000, guid: 5c3e8afd66bbc2d4eb0bcc4a2b10bf4c, type: 2}
+  - slot: Run_BL
+    clip: {fileID: 7400000, guid: c7f0756171cc97145877e6104809dff6, type: 2}
+  - slot: Walk_BR
+    clip: {fileID: 7400000, guid: bf6ec08da8f97a643a2a39693b2e9f09, type: 2}
+  - slot: Run_BR
+    clip: {fileID: 7400000, guid: 38e431fcd5b0f65459a16d1aa10948d9, type: 2}
+  - slot: Sprint_F
+    clip: {fileID: 7400000, guid: df4eaa2dda9d2c9489855b0741cb4994, type: 2}
+  - slot: Sprint_FL
+    clip: {fileID: 7400000, guid: 93334688db2761c4e89a2370d23cfad9, type: 2}
+  - slot: Sprint_FR
+    clip: {fileID: 7400000, guid: 333af73df4c4ab340929992ad4292239, type: 2}
+  - slot: Surge_F
+    clip: {fileID: 7400000, guid: 33911030b61a5b94faed65530e4e803f, type: 2}
+  - slot: JumpStart
+    clip: {fileID: 3094330708855449807, guid: b1844fbe628f5bf4ab29e6c68912a708, type: 3}
+  - slot: Fall
+    clip: {fileID: 8908273484855622883, guid: 1455f282db7117d419994bb5c5f3acc2, type: 3}
+  - slot: Land
+    clip: {fileID: 7400000, guid: d37a125ad5b90a54f9f732cedac70c76, type: 2}
+  - slot: Light1
+    clip: {fileID: 7400000, guid: 00bcf235ff0a3f44b82d6bce6eb3e274, type: 2}
+  - slot: Light2
+    clip: {fileID: 7400000, guid: c2314b7894a664a419b90ee60b8edff9, type: 2}
+  - slot: Light3
+    clip: {fileID: 7400000, guid: a050353a966dfe1459a9d56bca2c5985, type: 2}
+  - slot: Light4
+    clip: {fileID: 7400000, guid: 5572b227480e8454aaf6d113ab4fe34d, type: 2}
+  - slot: Heavy1
+    clip: {fileID: 7400000, guid: 1e14cbfb0b32bd244a1e727cba3ad21f, type: 2}
+  - slot: Heavy2
+    clip: {fileID: 7400000, guid: 3a3dadd337944a44391780cc753fb393, type: 2}
+  - slot: SprintAttack
+    clip: {fileID: 7400000, guid: f3f8a25c5350eb049bfab437a2382919, type: 2}
+  - slot: JumpAttack
+    clip: {fileID: 7400000, guid: f7bd4795fe2342546b52ec770e864506, type: 2}
+  - slot: RollAttack
+    clip: {fileID: 7400000, guid: de0e177ff96fd6245b82305f6ee83fa8, type: 2}
+  - slot: BackstepAttack
+    clip: {fileID: 7400000, guid: 2af740a104fbfd948a333c29ad378839, type: 2}
+  - slot: Skill
+    clip: {fileID: 7400000, guid: c4e84f81210709e40a7e6b7f57d6e060, type: 2}
+  - slot: SkillFollowUp
+    clip: {fileID: 7400000, guid: e88e4f78b042fbf4eb273db809f9b562, type: 2}
+  - slot: Roll
+    clip: {fileID: 7400000, guid: ee9be9d38e96b1b46a2a8ee1f53bff5e, type: 2}
+  - slot: LandRoll
+    clip: {fileID: 7400000, guid: 6a2691feb8d656341bc4cfb38f9113a9, type: 2}
+  - slot: Backstep
+    clip: {fileID: 7400000, guid: fea81394d4492484d913d1c1e01ff159, type: 2}
+  - slot: HitReact
+    clip: {fileID: 7400000, guid: be186b5dfeaf8c048a41f33fece9e652, type: 2}
+  - slot: Mantle
+    clip: {fileID: 7400000, guid: f92cdebe266006148934039a5087953b, type: 2}
+  - slot: Drink
+    clip: {fileID: 7400000, guid: 795a470fdfa72e04b84d0adf76618abc, type: 2}
+  - slot: Ultimate
+    clip: {fileID: 7400000, guid: a031f8169487d7443806ae7839d27758, type: 2}

@@ -1,0 +1,110 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aadc7ff67a7c8e24f8639300e1717ad0, type: 3}
+  m_Name: Ability_Subject143_ClawShot
+  m_EditorClassIdentifier: Subject143.Nightfarer::Subject143.Nightfarer.ClawShotAbility
+  displayName: Claw Shot
+  cooldown: 6
+  staminaCost: 0
+  animationSlot: Skill
+  range: 30
+  aimAssistAngle: 20
+  thrustTime: 0.09
+  lineSpeed: 90
+  pullSpeed: 30
+  stopDistance: 1.1
+  whiffRecovery: 0.35
+  hookDamage: 25
+  hookPoiseDamage: 15
+  followUpWindow: 0.7
+  followUpAttack:
+    name: Claw Shot Rend
+    animationSlot: SkillFollowUp
+    duration: 0.75
+    hitStart: 0.2
+    hitEnd: 0.34
+    extraHitWindows: []
+    comboWindowStart: 0.1
+    chainTime: 0.45
+    dodgeCancelTime: 0.36
+    moveCancelTime: 0.58
+    trackingEndTime: 0.16
+    trackingSpeed: 900
+    lungeDistance: 1
+    lungeStart: 0.02
+    lungeEnd: 0.22000001
+    carryMomentum: 0
+    chargeTimeMax: 0
+    chargeHoldPoint: 0.2
+    chargedDamageMultiplier: 1.6
+    holdUntilGrounded: 0
+    swing:
+      keys:
+      - t: 0
+        grip: {x: -0.3, y: 1.2, z: 0.3}
+        blade: {x: -0.21199958, y: 0.6359987, z: 0.7419985}
+      - t: 0.2
+        grip: {x: -0.25, y: 1.8, z: 0}
+        blade: {x: 0, y: 0.34893736, z: -0.93714607}
+      - t: 0.32
+        grip: {x: -0.15, y: 1.45, z: 0.45}
+        blade: {x: 0, y: 0.86193424, z: 0.5070201}
+      - t: 0.45
+        grip: {x: -0.12, y: 0.7, z: 0.6}
+        blade: {x: 0, y: -0.7556891, z: 0.65493053}
+      - t: 0.7
+        grip: {x: -0.12, y: 0.7, z: 0.55}
+        blade: {x: 0, y: -0.8, z: 0.6}
+      - t: 1
+        grip: {x: -0.32, y: 0.95, z: 0.38}
+        blade: {x: -0.15056568, y: -0.4015085, z: 0.9033941}
+    swingOff:
+      keys:
+      - t: 0
+        grip: {x: 0.3, y: 1.2, z: 0.3}
+        blade: {x: 0.21199958, y: 0.6359987, z: 0.7419985}
+      - t: 0.2
+        grip: {x: 0.25, y: 1.8, z: 0}
+        blade: {x: -0, y: 0.34893736, z: -0.93714607}
+      - t: 0.32
+        grip: {x: 0.15, y: 1.45, z: 0.45}
+        blade: {x: -0, y: 0.86193424, z: 0.5070201}
+      - t: 0.45
+        grip: {x: 0.12, y: 0.7, z: 0.6}
+        blade: {x: -0, y: -0.7556891, z: 0.65493053}
+      - t: 0.7
+        grip: {x: 0.12, y: 0.7, z: 0.55}
+        blade: {x: -0, y: -0.8, z: 0.6}
+      - t: 1
+        grip: {x: 0.32, y: 0.95, z: 0.38}
+        blade: {x: 0.15056568, y: -0.4015085, z: 0.9033941}
+    hand: 2
+    arcReach: 1.25
+    arcAngle: 130
+    staminaCost: 0
+    damage: 95
+    poiseDamage: 45
+    hitStopTime: 0.0625
+    hyperArmor: 1
+    screenBlur: 0.05
+    speedLines: 0.5
+    spaceCrack: 1
+    useAnimationEvents: 0
+  lineColor: {r: 0.45, g: 0.25, b: 0.6, a: 1}
+  lineWidth: 0.035
+  momentumCarry: 0.4
+  enemyMomentumCarry: 0.15
+  momentumPop: 3
+  momentumTime: 0.7
+  jumpCancelAfter: 0.05
+  windup: 0.22
+  maxPullTime: 0.7

@@ -44,6 +44,21 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 velocity;
 
+    // --- STAGE 1: single authoritative motion data, derived from the CharacterController.
+    // Read these from other systems instead of the Rigidbody. Updated at the end of
+    // Update(), immediately after controller.Move().
+    public Vector3 CurrentVelocity { get; private set; }
+    public Vector3 HorizontalVelocity { get; private set; }
+    public float HorizontalSpeed { get; private set; }
+    public float VerticalSpeed { get; private set; }
+    public Vector3 Acceleration { get; private set; }
+    public bool Grounded { get; private set; }
+
+    private Vector3 _lastAuthVelocity;
+
+    [Header("Debug (temporary)")]
+    public bool showMotionDebug = false;
+
     void Awake()
     {
         inputActions = new PlayerInputActions();
@@ -66,6 +81,15 @@ public class PlayerMovement : MonoBehaviour
             };
 
         inputActions.Player.WalkToggle.performed += _ => isWalking = !isWalking;
+
+        // STAGE 1: the CharacterController is the sole movement authority. Keep the
+        // Rigidbody (other systems still reference it) but make it kinematic so it no
+        // longer fights the CharacterController or produces unreliable velocity.
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+            rb.useGravity = false;
+        }
     }
 
     void OnEnable()
@@ -86,8 +110,7 @@ public class PlayerMovement : MonoBehaviour
 
     public bool IsMoving()
     {
-        Vector3 horizontalVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
-        return horizontalVelocity.magnitude > 0.1f;
+        return HorizontalSpeed > 0.1f;
     }
 
     public bool IsGrounded()
@@ -105,7 +128,7 @@ public class PlayerMovement : MonoBehaviour
 
     public Vector3 GetVelocity()
     {
-        return rb.linearVelocity;
+        return CurrentVelocity;
     }
 
     void Update()
@@ -121,8 +144,10 @@ public class PlayerMovement : MonoBehaviour
             isSprinting = false;
         }
 
-        Vector3 horizontalVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
-        float speed = horizontalVelocity.magnitude;
+        // STAGE 2: authoritative horizontal speed (from the CharacterController,
+        // published at the end of the previous Update). Behaviour is unchanged because
+        // the input-based animation tiers below still floor this value.
+        float speed = HorizontalSpeed;
 
         // Clamp tiny movement
         if (speed < 1f)
@@ -332,7 +357,34 @@ public class PlayerMovement : MonoBehaviour
         animator.SetFloat("verticalVelocity", velocity.y);
 
         controller.Move(finalMove * Time.deltaTime);
+
+        // STAGE 1: publish authoritative motion data using what the controller
+        // actually did this frame.
+        UpdateMotionData();
     }
+
+    // Derives trustworthy velocity/acceleration/grounded from the CharacterController.
+    void UpdateMotionData()
+    {
+        float dt = Time.deltaTime;
+
+        Vector3 v = controller != null ? controller.velocity : Vector3.zero;
+        if (float.IsNaN(v.x) || float.IsNaN(v.y) || float.IsNaN(v.z)) v = Vector3.zero;
+
+        CurrentVelocity = v;
+        HorizontalVelocity = new Vector3(v.x, 0f, v.z);
+        HorizontalSpeed = HorizontalVelocity.magnitude;
+        VerticalSpeed = v.y;
+
+        Vector3 accel = dt > 0f ? (v - _lastAuthVelocity) / dt : Vector3.zero;
+        if (float.IsNaN(accel.x) || float.IsNaN(accel.y) || float.IsNaN(accel.z)) accel = Vector3.zero;
+        // Light smoothing so single-frame spikes (e.g. landing) don't dominate reads.
+        Acceleration = Vector3.Lerp(Acceleration, accel, 1f - Mathf.Exp(-15f * dt));
+
+        Grounded = controller != null && controller.isGrounded;
+        _lastAuthVelocity = v;
+    }
+
     public bool IsSprinting()
     {
         return isSprinting;
@@ -383,5 +435,24 @@ public class PlayerMovement : MonoBehaviour
         animator.SetTrigger("jumpTrigger");
 
         velocity.y += 1.5f;
+    }
+
+    // STAGE 4: temporary on-screen validation of the authoritative motion data.
+    // Toggle "Show Motion Debug" on the PlayerMovement component. Remove later.
+    void OnGUI()
+    {
+        if (!showMotionDebug) return;
+
+        var style = new GUIStyle(GUI.skin.box) { alignment = TextAnchor.UpperLeft, fontSize = 14 };
+        GUILayout.BeginArea(new Rect(10, 10, 380, 230), style);
+        GUILayout.Label($"Grounded:    {Grounded}");
+        GUILayout.Label($"Velocity:    ({CurrentVelocity.x:F2}, {CurrentVelocity.y:F2}, {CurrentVelocity.z:F2})");
+        GUILayout.Label($"H-Speed:     {HorizontalSpeed:F2} m/s");
+        GUILayout.Label($"V-Speed:     {VerticalSpeed:F2} m/s");
+        GUILayout.Label($"Accel:       {Acceleration.magnitude:F2} m/s^2");
+        GUILayout.Label($"State:       walk={isWalking}  sprint={isSprinting}");
+        GUILayout.Label($"Charging:    {isCharging}   charge={currentCharge:F2}s");
+        GUILayout.Label($"rb.kinematic: {(rb != null ? rb.isKinematic.ToString() : "no rb")}");
+        GUILayout.EndArea();
     }
 }

@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aadc7ff67a7c8e24f8639300e1717ad0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Subject143.Nightfarer::Subject143.Nightfarer.ClawShotAbility
+  displayName: Claw Shot
+  cooldown: 6
+  staminaCost: 0
+  animationSlot: Skill
+  range: 16
+  aimAssistAngle: 20
+  windup: 0.22
+  pullSpeed: 24
+  maxPullTime: 0.7
+  stopDistance: 1.6
+  whiffRecovery: 0.35
+  hookDamage: 25
+  hookPoiseDamage: 15
+  followUpWindow: 0.7
+  followUpAttack:
+    name: Claw Follow-up
+    animationSlot: SkillFollowUp
+    duration: 1
+    hitStart: 0.3
+    hitEnd: 0.48
+    comboWindowStart: 0.18
+    chainTime: 0.7
+    dodgeCancelTime: 0.6
+    moveCancelTime: 0.85
+    trackingEndTime: 0.21000001
+    trackingSpeed: 540
+    lungeDistance: 1.2
+    lungeStart: 0.105000004
+    lungeEnd: 0.315
+    carryMomentum: 0
+    chargeTimeMax: 0
+    chargeHoldPoint: 0.2
+    chargedDamageMultiplier: 1.6
+    holdUntilGrounded: 0
+    swing:
+      keys:
+      - t: 0
+        grip: {x: 0.1, y: 1.1, z: 0.4}
+        blade: {x: 0.10050379, y: 0.70352644, z: 0.70352644}
+      - t: 0.2
+        grip: {x: 0.05, y: 1.8, z: 0}
+        blade: {x: 0, y: 0.34893736, z: -0.93714607}
+      - t: 0.32
+        grip: {x: 0.03, y: 1.5, z: 0.45}
+        blade: {x: 0, y: 0.86193424, z: 0.5070201}
+      - t: 0.42
+        grip: {x: 0, y: 0.85, z: 0.6}
+        blade: {x: 0, y: -0.70710677, z: 0.70710677}
+      - t: 0.7
+        grip: {x: 0, y: 0.8, z: 0.55}
+        blade: {x: 0, y: -0.7556891, z: 0.65493053}
+      - t: 1
+        grip: {x: 0.12, y: 1, z: 0.32}
+        blade: {x: 0.14944066, y: 0.7472033, z: 0.64757615}
+    arcReach: 1.6
+    arcAngle: 120
+    staminaCost: 0
+    damage: 110
+    poiseDamage: 50
+    hitStopTime: 0.075
+    hyperArmor: 1
+    useAnimationEvents: 0
+  lineColor: {r: 0.9, g: 0.75, b: 0.35, a: 1}

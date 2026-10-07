@@ -11,6 +11,9 @@ public class TouchState : EnvironmentInteractionState
     public override void UpdateState()
     {
         t += Time.deltaTime;
+
+        // Keep the forearm/elbow settled and alive while the palm rests on the surface.
+        UpdateElbowHint();
     }
 
     public override EnvironmentInteractionStateMachine.EEnvironmentInteractionState GetNextState()

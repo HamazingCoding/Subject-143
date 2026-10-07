@@ -2,9 +2,11 @@ using UnityEngine;
 
 public class RiseState : EnvironmentInteractionState
 {
+    private const float HeightBlendSpeed = 8f;
+
     float t;
 
-    public RiseState(EnvironmentInteractionContext c, EnvironmentInteractionStateMachine.EEnvironmentInteractionState k) : base(c, k) {}
+    public RiseState(EnvironmentInteractionContext c, EnvironmentInteractionStateMachine.EEnvironmentInteractionState k) : base(c, k) { }
 
     public override void EnterState() { t = 0; }
 
@@ -12,24 +14,42 @@ public class RiseState : EnvironmentInteractionState
     {
         t += Time.deltaTime;
 
-        ctx.InteractionYOffset = Mathf.Lerp(
-            ctx.InteractionYOffset,
-            ctx.ClosestPoint.y,
-            t / 0.5f
-        );
+        float reach = ctx.ComputeReachStrength();
 
-        ctx.CurrentIK.weight = Mathf.Lerp(ctx.CurrentIK.weight, 1f, t);
+        // Blend the interaction height toward the actual contact height.
+        if (!float.IsNaN(ctx.ClosestPoint.y) && !float.IsInfinity(ctx.ClosestPoint.y))
+        {
+            ctx.InteractionYOffset = Mathf.Lerp(
+                ctx.InteractionYOffset,
+                ctx.ClosestPoint.y,
+                Time.deltaTime * HeightBlendSpeed);
+        }
 
-        Vector3 dir = (ctx.ClosestPoint - ctx.CurrentShoulder.position).normalized;
+        ctx.CurrentIK.weight = SmoothWeight(
+            ctx.CurrentIK.weight, ctx.Settings.maxIkWeight * reach, ctx.Settings.weightSmoothSpeed);
+        ctx.CurrentRot.weight = SmoothWeight(
+            ctx.CurrentRot.weight, ctx.Settings.maxRotationWeight * reach, ctx.Settings.weightSmoothSpeed);
+
+        UpdateElbowHint();
+
+        // Orient the palm to the surface it is actually touching.
+        Vector3 dir = ctx.ClosestPoint - ctx.CurrentShoulder.position;
+        if (dir.sqrMagnitude < 0.0001f)
+            return;
+        dir.Normalize();
 
         if (Physics.Raycast(ctx.CurrentShoulder.position, dir, out RaycastHit hit, 1f,
             LayerMask.GetMask("Interactable")))
         {
             Vector3 forward = -hit.normal;
-            Quaternion rot = Quaternion.LookRotation(forward, Vector3.up);
 
-            ctx.CurrentTarget.rotation = Quaternion.RotateTowards(
-                ctx.CurrentTarget.rotation, rot, 1000 * Time.deltaTime);
+            // Avoid a degenerate LookRotation on floor/ceiling normals.
+            Vector3 up = Mathf.Abs(Vector3.Dot(forward, Vector3.up)) > 0.99f
+                ? ctx.Root.forward
+                : Vector3.up;
+
+            Quaternion rot = Quaternion.LookRotation(forward, up);
+            SmoothTargetRotation(rot);
         }
     }
 
@@ -47,5 +67,5 @@ public class RiseState : EnvironmentInteractionState
     public override void OnTriggerStay(Collider o) => UpdateTracking(o);
     public override void OnTriggerExit(Collider o) => StopTracking(o);
 
-    public override void ExitState() {}
+    public override void ExitState() { }
 }

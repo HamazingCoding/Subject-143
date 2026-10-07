@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5adea62ea31a96042b803ad8ba57f82e, type: 3}
+  m_Name: Ultimate_OnslaughtStake
+  m_EditorClassIdentifier: Subject143.Nightfarer::Subject143.Nightfarer.OnslaughtStakeAbility
+  displayName: Onslaught Stake
+  cooldown: 0
+  staminaCost: 0
+  animationSlot: Ultimate
+  windup: 0.7
+  recovery: 0.75
+  lungeDistance: 1.4
+  blastRadius: 4.5
+  blastArc: 220
+  damage: 420
+  poiseDamage: 250
+  blastColor: {r: 1, g: 0.55, b: 0.2, a: 0.55}

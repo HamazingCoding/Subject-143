@@ -1,0 +1,800 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40f97c889cb27b347a354a0cf2f76ee1, type: 3}
+  m_Name: Weapon_Subject143_Claws
+  m_EditorClassIdentifier: Subject143.Nightfarer::Subject143.Nightfarer.WeaponData
+  displayName: Thorn Claw
+  modelPrefab: {fileID: 0}
+  attachBone: 18
+  autoGrip: 1
+  gripPositionOffset: {x: 0, y: 0, z: 0}
+  gripRotationOffset: {x: 0, y: 0, z: 0}
+  twoHanded: 0
+  secondGrip: {x: 0, y: 0.15, z: 0}
+  guardPose:
+    t: 0
+    grip: {x: -0.32, y: 0.95, z: 0.38}
+    blade: {x: -0.15056568, y: -0.4015085, z: 0.9033941}
+  carryPose:
+    t: 0
+    grip: {x: -0.36, y: 0.72, z: -0.12}
+    blade: {x: -0.09950372, y: -0.5970223, z: -0.79602975}
+  claws: 1
+  primaryHand: 17
+  primaryClawLength: 0.24
+  primaryClawRadius: 0.1
+  offClawLength: 0.1
+  offClawRadius: 0.07
+  offGuardPose:
+    t: 0
+    grip: {x: 0.24, y: 1.02, z: 0.28}
+    blade: {x: 0.15120693, y: 0.20160922, z: 0.96772426}
+  bladeStart: {x: 0, y: 0.15, z: 0}
+  bladeEnd: {x: 0, y: 1.3, z: 0}
+  bladeRadius: 0.14
+  movesetVersion: 2
+  lightChain:
+  - name: Beast Swipe
+    animationSlot: Light1
+    duration: 0.42
+    hitStart: 0.11
+    hitEnd: 0.19
+    extraHitWindows: []
+    comboWindowStart: 0.06
+    chainTime: 0.22
+    dodgeCancelTime: 0.16
+    moveCancelTime: 0.3
+    trackingEndTime: 0.099
+    trackingSpeed: 900
+    lungeDistance: 0.6
+    lungeStart: 0.02
+    lungeEnd: 0.121
+    carryMomentum: 0
+    chargeTimeMax: 0
+    chargeHoldPoint: 0.2
+    chargedDamageMultiplier: 1.6
+    holdUntilGrounded: 0
+    swing:
+      keys:
+      - t: 0
+        grip: {x: -0.32, y: 0.95, z: 0.38}
+        blade: {x: -0.15056568, y: -0.4015085, z: 0.9033941}
+      - t: 0.16
+        grip: {x: -0.55, y: 0.6, z: 0.1}
+        blade: {x: -0.61885273, y: -0.7219948, z: 0.30942637}
+      - t: 0.24
+        grip: {x: -0.3, y: 0.95, z: 0.6}
+        blade: {x: 0.09987524, y: 0.29962572, z: 0.94881475}
+      - t: 0.32
+        grip: {x: 0.15, y: 1.35, z: 0.55}
+        blade: {x: 0.696526, y: 0.5970223, z: 0.39801487}
+      - t: 0.42
+        grip: {x: 0.35, y: 1.5, z: 0.25}
+        blade: {x: 0.8070932, y: 0.55487657, z: -0.2017733}
+      - t: 0.7
+        grip: {x: 0.05, y: 1.2, z: 0.35}
+        blade: {x: 0.40561607, y: 0.30421206, z: 0.8619342}
+      - t: 1
+        grip: {x: -0.32, y: 0.95, z: 0.38}
+        blade: {x: -0.15056568, y: -0.4015085, z: 0.9033941}
+    swingOff:
+      keys: []
+    hand: 0
+    arcReach: 1.25
+    arcAngle: 160
+    staminaCost: 8
+    damage: 42
+    poiseDamage: 12
+    hitStopTime: 0.036
+    hyperArmor: 0
+    screenBlur: 0
+    speedLines: 0
+    spaceCrack: 0
+    useAnimationEvents: 0
+  - name: Counter Swipe
+    animationSlot: Light2
+    duration: 0.4
+    hitStart: 0.1
+    hitEnd: 0.18
+    extraHitWindows: []
+    comboWindowStart: 0.06
+    chainTime: 0.21
+    dodgeCancelTime: 0.15
+    moveCancelTime: 0.29
+    trackingEndTime: 0.089999996
+    trackingSpeed: 900
+    lungeDistance: 0.6
+    lungeStart: 0.02
+    lungeEnd: 0.11000001
+    carryMomentum: 0
+    chargeTimeMax: 0
+    chargeHoldPoint: 0.2
+    chargedDamageMultiplier: 1.6
+    holdUntilGrounded: 0
+    swing:
+      keys:
+      - t: 0
+        grip: {x: -0.32, y: 0.95, z: 0.38}
+        blade: {x: -0.15056568, y: -0.4015085, z: 0.9033941}
+      - t: 0.3
+        grip: {x: -0.55, y: 1.25, z: -0.15}
+        blade: {x: -0.5025189, y: 0.5025189, z: -0.70352644}
+      - t: 0.85
+        grip: {x: -0.5, y: 1.2, z: -0.1}
+        blade: {x: -0.5025189, y: 0.5025189, z: -0.70352644}
+      - t: 1
+        grip: {x: -0.32, y: 0.95, z: 0.38}
+        blade: {x: -0.15056568, y: -0.4015085, z: 0.9033941}
+    swingOff:
+      keys:
+      - t: 0
+        grip: {x: 0.24, y: 1.02, z: 0.28}
+        blade: {x: 0.15120693, y: 0.20160922, z: 0.96772426}
+      - t: 0.16
+        grip: {x: 0.5, y: 0.6, z: 0.1}
+        blade: {x: 0.61885273, y: -0.7219948, z: 0.30942637}
+      - t: 0.24
+        grip: {x: 0.25, y: 0.95, z: 0.55}
+        blade: {x: -0.09987524, y: 0.29962572, z: 0.94881475}
+      - t: 0.32
+        grip: {x: -0.15, y: 1.3, z: 0.5}
+        blade: {x: -0.696526, y: 0.5970223, z: 0.39801487}
+      - t: 0.6
+        grip: {x: 0, y: 1.1, z: 0.35}
+        blade: {x: -0.30151135, y: 0.30151135, z: 0.90453404}
+      - t: 1
+        grip: {x: 0.24, y: 1.02, z: 0.28}
+        blade: {x: 0.15120693, y: 0.20160922, z: 0.96772426}
+    hand: 1
+    arcReach: 1.25
+    arcAngle: 160
+    staminaCost: 7
+    damage: 36
+    poiseDamage: 10
+    hitStopTime: 0.035
+    hyperArmor: 0
+    screenBlur: 0
+    speedLines: 0
+    spaceCrack: 0
+    useAnimationEvents: 0
+  - name: Twin Rake
+    animationSlot: Light3
+    duration: 0.52
+    hitStart: 0.16
+    hitEnd: 0.26
+    extraHitWindows: []
+    comboWindowStart: 0.08
+    chainTime: 0.3
+    dodgeCancelTime: 0.22
+    moveCancelTime: 0.38
+    trackingEndTime: 0.144
+    trackingSpeed: 900
+    lungeDistance: 1.2
+    lungeStart: 0.02
+    lungeEnd: 0.176
+    carryMomentum: 0
+    chargeTimeMax: 0
+    chargeHoldPoint: 0.2
+    chargedDamageMultiplier: 1.6
+    holdUntilGrounded: 0
+    swing:
+      keys:
+      - t: 0
+        grip: {x: -0.32, y: 0.95, z: 0.38}
+        blade: {x: -0.15056568, y: -0.4015085, z: 0.9033941}
+      - t: 0.25
+        grip: {x: -0.25, y: 1.7, z: 0.15}
+        blade: {x: 0, y: 0.70710677, z: -0.70710677}
+      - t: 0.35
+        grip: {x: -0.2, y: 1.3, z: 0.6}
+        blade: {x: 0, y: 0.30113137, z: 0.95358264}
+      - t: 0.45
+        grip: {x: -0.18, y: 0.6, z: 0.6}
+        blade: {x: 0, y: -0.8944272, z: 0.4472136}
+      - t: 0.7
+        grip: {x: -0.2, y: 0.65, z: 0.5}
+        blade: {x: 0, y: -0.86193424, z: 0.5070201}
+      - t: 1
+        grip: {x: -0.32, y: 0.95, z: 0.38}
+        blade: {x: -0.15056568, y: -0.4015085, z: 0.9033941}
+    swingOff:
+      keys:
+      - t: 0
+        grip: {x: 0.32, y: 0.95, z: 0.38}
+        blade: {x: 0.15056568, y: -0.4015085, z: 0.9033941}
+      - t: 0.25
+        grip: {x: 0.25, y: 1.7, z: 0.15}
+        blade: {x: -0, y: 0.70710677, z: -0.70710677}
+      - t: 0.35
+        grip: {x: 0.2, y: 1.3, z: 0.6}
+        blade: {x: -0, y: 0.30113137, z: 0.95358264}
+      - t: 0.45
+        grip: {x: 0.18, y: 0.6, z: 0.6}
+        blade: {x: -0, y: -0.8944272, z: 0.4472136}
+      - t: 0.7
+        grip: {x: 0.2, y: 0.65, z: 0.5}
+        blade: {x: -0, y: -0.86193424, z: 0.5070201}
+      - t: 1
+        grip: {x: 0.32, y: 0.95, z: 0.38}
+        blade: {x: 0.15056568, y: -0.4015085, z: 0.9033941}
+    hand: 2
+    arcReach: 1.25
+    arcAngle: 120
+    staminaCost: 10
+    damage: 55
+    poiseDamage: 18
+    hitStopTime: 0.0425
+    hyperArmor: 0
+    screenBlur: 0
+    speedLines: 0
+    spaceCrack: 0
+    useAnimationEvents: 0
+  - name: Frenzy
+    animationSlot: Light4
+    duration: 0.7
+    hitStart: 0.1
+    hitEnd: 0.17
+    extraHitWindows:
+    - {x: 0.24, y: 0.31}
+    - {x: 0.38, y: 0.46}
+    comboWindowStart: 0.06
+    chainTime: 0.5
+    dodgeCancelTime: 0.46
+    moveCancelTime: 0.58
+    trackingEndTime: 0.089999996
+    trackingSpeed: 900
+    lungeDistance: 0.9
+    lungeStart: 0.02
+    lungeEnd: 0.11000001
+    carryMomentum: 0
+    chargeTimeMax: 0
+    chargeHoldPoint: 0.2
+    chargedDamageMultiplier: 1.6
+    holdUntilGrounded: 0
+    swing:
+      keys:
+      - t: 0
+        grip: {x: -0.32, y: 0.95, z: 0.38}
+        blade: {x: -0.15056568, y: -0.4015085, z: 0.9033941}
+      - t: 0.08
+        grip: {x: -0.6, y: 1.25, z: 0}
+        blade: {x: -0.8849847, y: 0.20823169, z: -0.41646338}
+      - t: 0.17
+        grip: {x: 0.2, y: 1.1, z: 0.55}
+        blade: {x: 0.81970483, y: -0.102463104, z: 0.5635471}
+      - t: 0.3
+        grip: {x: -0.5, y: 1.3, z: 0.05}
+        blade: {x: -0.80812204, y: 0.30304578, z: -0.5050762}
+      - t: 0.44
+        grip: {x: 0.25, y: 1, z: 0.6}
+        blade: {x: 0.8447368, y: -0.1987616, z: 0.496904}
+      - t: 0.65
+        grip: {x: 0, y: 1, z: 0.4}
+        blade: {x: 0.39801487, y: -0.19900744, z: 0.89553344}
+      - t: 1
+        grip: {x: -0.32, y: 0.95, z: 0.38}
+        blade: {x: -0.15056568, y: -0.4015085, z: 0.9033941}
+    swingOff:
+      keys:
+      - t: 0
+        grip: {x: 0.24, y: 1.02, z: 0.28}
+        blade: {x: 0.15120693, y: 0.20160922, z: 0.96772426}
+      - t: 0.2
+        grip: {x: 0.6, y: 1.25, z: 0}
+        blade: {x: 0.8849847, y: 0.20823169, z: -0.41646338}
+      - t: 0.31
+        grip: {x: -0.2, y: 1.05, z: 0.55}
+        blade: {x: -0.81970483, y: -0.102463104, z: 0.5635471}
+      - t: 0.6
+        grip: {x: 0.1, y: 1, z: 0.35}
+        blade: {x: 0.20492622, y: 0.10246311, z: 0.9733995}
+      - t: 1
+        grip: {x: 0.24, y: 1.02, z: 0.28}
+        blade: {x: 0.15120693, y: 0.20160922, z: 0.96772426}
+    hand: 2
+    arcReach: 1.25
+    arcAngle: 150
+    staminaCost: 13
+    damage: 30
+    poiseDamage: 10
+    hitStopTime: 0.035
+    hyperArmor: 0
+    screenBlur: 0.02
+    speedLines: 0.35
+    spaceCrack: 0
+    useAnimationEvents: 0
+  - name: Mauling Pounce
+    animationSlot: Light5
+    duration: 0.85
+    hitStart: 0.36
+    hitEnd: 0.48
+    extraHitWindows: []
+    comboWindowStart: 0.18
+    chainTime: 0.56
+    dodgeCancelTime: 0.46
+    moveCancelTime: 0.68
+    trackingEndTime: 0.16
+    trackingSpeed: 900
+    lungeDistance: 2
+    lungeStart: 0.1
+    lungeEnd: 0.42
+    carryMomentum: 0
+    chargeTimeMax: 0
+    chargeHoldPoint: 0.2
+    chargedDamageMultiplier: 1.6
+    holdUntilGrounded: 0
+    swing:
+      keys:
+      - t: 0
+        grip: {x: -0.32, y: 0.95, z: 0.38}
+        blade: {x: -0.15056568, y: -0.4015085, z: 0.9033941}
+      - t: 0.2
+        grip: {x: -0.3, y: 1.8, z: -0.05}
+        blade: {x: -0.09950372, y: 0.5970223, z: -0.79602975}
+      - t: 0.36
+        grip: {x: -0.2, y: 1.4, z: 0.55}
+        blade: {x: 0, y: 0.40613848, z: 0.91381156}
+      - t: 0.46
+        grip: {x: -0.15, y: 0.45, z: 0.6}
+        blade: {x: 0, y: -0.95358264, z: 0.30113137}
+      - t: 0.75
+        grip: {x: -0.15, y: 0.5, z: 0.55}
+        blade: {x: 0, y: -0.91381156, z: 0.40613848}
+      - t: 1
+        grip: {x: -0.32, y: 0.95, z: 0.38}
+        blade: {x: -0.15056568, y: -0.4015085, z: 0.9033941}
+    swingOff:
+      keys:
+      - t: 0
+        grip: {x: 0.32, y: 0.95, z: 0.38}
+        blade: {x: 0.15056568, y: -0.4015085, z: 0.9033941}
+      - t: 0.2
+        grip: {x: 0.3, y: 1.8, z: -0.05}
+        blade: {x: 0.09950372, y: 0.5970223, z: -0.79602975}
+      - t: 0.36
+        grip: {x: 0.2, y: 1.4, z: 0.55}
+        blade: {x: -0, y: 0.40613848, z: 0.91381156}
+      - t: 0.46
+        grip: {x: 0.15, y: 0.45, z: 0.6}
+        blade: {x: -0, y: -0.95358264, z: 0.30113137}
+      - t: 0.75
+        grip: {x: 0.15, y: 0.5, z: 0.55}
+        blade: {x: -0, y: -0.91381156, z: 0.40613848}
+      - t: 1
+        grip: {x: 0.32, y: 0.95, z: 0.38}
+        blade: {x: 0.15056568, y: -0.4015085, z: 0.9033941}
+    hand: 2
+    arcReach: 1.25
+    arcAngle: 130
+    staminaCost: 15
+    damage: 90
+    poiseDamage: 40
+    hitStopTime: 0.06
+    hyperArmor: 0
+    screenBlur: 0.05
+    speedLines: 0.45
+    spaceCrack: 1
+    useAnimationEvents: 0
+  heavyChain:
+  - name: Savage Lunge (hold to charge)
+    animationSlot: Heavy1
+    duration: 0.95
+    hitStart: 0.42
+    hitEnd: 0.54
+    extraHitWindows: []
+    comboWindowStart: 0.21
+    chainTime: 0.64
+    dodgeCancelTime: 0.52
+    moveCancelTime: 0.78
+    trackingEndTime: 0.16
+    trackingSpeed: 900
+    lungeDistance: 2.4
+    lungeStart: 0.3
+    lungeEnd: 0.5
+    carryMomentum: 0
+    chargeTimeMax: 0.8
+    chargeHoldPoint: 0.15
+    chargedDamageMultiplier: 1.7
+    holdUntilGrounded: 0
+    swing:
+      keys:
+      - t: 0
+        grip: {x: -0.32, y: 0.95, z: 0.38}
+        blade: {x: -0.15056568, y: -0.4015085, z: 0.9033941}
+      - t: 0.15
+        grip: {x: -0.4, y: 0.55, z: -0.25}
+        blade: {x: -0.30942637, y: -0.61885273, z: -0.7219948}
+      - t: 0.42
+        grip: {x: -0.25, y: 0.8, z: 0.6}
+        blade: {x: 0, y: -0.19996001, z: 0.97980404}
+      - t: 0.5
+        grip: {x: -0.15, y: 1.45, z: 0.6}
+        blade: {x: 0, y: 0.8, z: 0.6}
+      - t: 0.62
+        grip: {x: -0.15, y: 1.65, z: 0.35}
+        blade: {x: 0, y: 0.99450547, z: -0.104684785}
+      - t: 0.82
+        grip: {x: -0.2, y: 1.3, z: 0.3}
+        blade: {x: -0.20739034, y: 0.51847583, z: 0.82956135}
+      - t: 1
+        grip: {x: -0.32, y: 0.95, z: 0.38}
+        blade: {x: -0.15056568, y: -0.4015085, z: 0.9033941}
+    swingOff:
+      keys:
+      - t: 0
+        grip: {x: 0.32, y: 0.95, z: 0.38}
+        blade: {x: 0.15056568, y: -0.4015085, z: 0.9033941}
+      - t: 0.15
+        grip: {x: 0.4, y: 0.55, z: -0.25}
+        blade: {x: 0.30942637, y: -0.61885273, z: -0.7219948}
+      - t: 0.42
+        grip: {x: 0.25, y: 0.8, z: 0.6}
+        blade: {x: -0, y: -0.19996001, z: 0.97980404}
+      - t: 0.5
+        grip: {x: 0.15, y: 1.45, z: 0.6}
+        blade: {x: -0, y: 0.8, z: 0.6}
+      - t: 0.62
+        grip: {x: 0.15, y: 1.65, z: 0.35}
+        blade: {x: -0, y: 0.99450547, z: -0.104684785}
+      - t: 0.82
+        grip: {x: 0.2, y: 1.3, z: 0.3}
+        blade: {x: 0.20739034, y: 0.51847583, z: 0.82956135}
+      - t: 1
+        grip: {x: 0.32, y: 0.95, z: 0.38}
+        blade: {x: 0.15056568, y: -0.4015085, z: 0.9033941}
+    hand: 2
+    arcReach: 1.25
+    arcAngle: 110
+    staminaCost: 20
+    damage: 120
+    poiseDamage: 55
+    hitStopTime: 0.074999996
+    hyperArmor: 1
+    screenBlur: 0.06
+    speedLines: 0.5
+    spaceCrack: 1
+    useAnimationEvents: 0
+  - name: Beast Maul (hold to charge)
+    animationSlot: Heavy2
+    duration: 1
+    hitStart: 0.36
+    hitEnd: 0.44
+    extraHitWindows:
+    - {x: 0.56, y: 0.64}
+    comboWindowStart: 0.18
+    chainTime: 0.72
+    dodgeCancelTime: 0.68
+    moveCancelTime: 0.84
+    trackingEndTime: 0.16
+    trackingSpeed: 900
+    lungeDistance: 1.2
+    lungeStart: 0.02
+    lungeEnd: 0.39600003
+    carryMomentum: 0
+    chargeTimeMax: 0.8
+    chargeHoldPoint: 0.15
+    chargedDamageMultiplier: 1.6
+    holdUntilGrounded: 0
+    swing:
+      keys:
+      - t: 0
+        grip: {x: -0.32, y: 0.95, z: 0.38}
+        blade: {x: -0.15056568, y: -0.4015085, z: 0.9033941}
+      - t: 0.2
+        grip: {x: -0.3, y: 1.85, z: 0}
+        blade: {x: -0.10050379, y: 0.70352644, z: -0.70352644}
+      - t: 0.36
+        grip: {x: -0.2, y: 1.2, z: 0.6}
+        blade: {x: 0, y: 0.19996001, z: 0.97980404}
+      - t: 0.44
+        grip: {x: -0.15, y: 0.45, z: 0.55}
+        blade: {x: 0, y: -0.95358264, z: 0.30113137}
+      - t: 0.6
+        grip: {x: -0.4, y: 0.9, z: 0.1}
+        blade: {x: -0.42163703, y: -0.52704626, z: 0.73786473}
+      - t: 1
+        grip: {x: -0.32, y: 0.95, z: 0.38}
+        blade: {x: -0.15056568, y: -0.4015085, z: 0.9033941}
+    swingOff:
+      keys:
+      - t: 0
+        grip: {x: 0.24, y: 1.02, z: 0.28}
+        blade: {x: 0.15120693, y: 0.20160922, z: 0.96772426}
+      - t: 0.3
+        grip: {x: 0.3, y: 1.85, z: 0}
+        blade: {x: 0.10050379, y: 0.70352644, z: -0.70352644}
+      - t: 0.56
+        grip: {x: 0.2, y: 1.2, z: 0.6}
+        blade: {x: 0, y: 0.19996001, z: 0.97980404}
+      - t: 0.64
+        grip: {x: 0.15, y: 0.45, z: 0.55}
+        blade: {x: 0, y: -0.95358264, z: 0.30113137}
+      - t: 0.85
+        grip: {x: 0.2, y: 0.9, z: 0.3}
+        blade: {x: 0.20492622, y: 0.10246311, z: 0.9733995}
+      - t: 1
+        grip: {x: 0.24, y: 1.02, z: 0.28}
+        blade: {x: 0.15120693, y: 0.20160922, z: 0.96772426}
+    hand: 2
+    arcReach: 1.25
+    arcAngle: 120
+    staminaCost: 22
+    damage: 75
+    poiseDamage: 40
+    hitStopTime: 0.0525
+    hyperArmor: 1
+    screenBlur: 0.06
+    speedLines: 0.5
+    spaceCrack: 1
+    useAnimationEvents: 0
+  sprintAttack:
+    name: Prowling Lunge
+    animationSlot: SprintAttack
+    duration: 0.75
+    hitStart: 0.24
+    hitEnd: 0.36
+    extraHitWindows: []
+    comboWindowStart: 0.12
+    chainTime: 0.48
+    dodgeCancelTime: 0.36
+    moveCancelTime: 0.6
+    trackingEndTime: 0.16
+    trackingSpeed: 900
+    lungeDistance: 2.6
+    lungeStart: 0.02
+    lungeEnd: 0.264
+    carryMomentum: 0.6
+    chargeTimeMax: 0
+    chargeHoldPoint: 0.2
+    chargedDamageMultiplier: 1.6
+    holdUntilGrounded: 0
+    swing:
+      keys:
+      - t: 0
+        grip: {x: -0.36, y: 0.72, z: -0.12}
+        blade: {x: -0.09950372, y: -0.5970223, z: -0.79602975}
+      - t: 0.2
+        grip: {x: -0.3, y: 0.9, z: -0.2}
+        blade: {x: -0.09987524, y: -0.29962572, z: -0.94881475}
+      - t: 0.3
+        grip: {x: -0.15, y: 1.05, z: 0.75}
+        blade: {x: 0, y: 0, z: 1}
+      - t: 0.4
+        grip: {x: -0.1, y: 1.05, z: 0.8}
+        blade: {x: 0, y: 0, z: 1}
+      - t: 0.7
+        grip: {x: -0.2, y: 1, z: 0.45}
+        blade: {x: -0.10246311, y: -0.20492622, z: 0.9733995}
+      - t: 1
+        grip: {x: -0.32, y: 0.95, z: 0.38}
+        blade: {x: -0.15056568, y: -0.4015085, z: 0.9033941}
+    swingOff:
+      keys: []
+    hand: 0
+    arcReach: 1.25
+    arcAngle: 90
+    staminaCost: 14
+    damage: 80
+    poiseDamage: 30
+    hitStopTime: 0.055
+    hyperArmor: 0
+    screenBlur: 0.05
+    speedLines: 0.7
+    spaceCrack: 0
+    useAnimationEvents: 0
+  jumpAttack:
+    name: Falling Maul
+    animationSlot: JumpAttack
+    duration: 0.7
+    hitStart: 0.2
+    hitEnd: 0.4
+    extraHitWindows: []
+    comboWindowStart: 0.1
+    chainTime: 0.5
+    dodgeCancelTime: 0.4
+    moveCancelTime: 0.58
+    trackingEndTime: 0.16
+    trackingSpeed: 900
+    lungeDistance: 0
+    lungeStart: 0.02
+    lungeEnd: 0.22000001
+    carryMomentum: 1
+    chargeTimeMax: 0
+    chargeHoldPoint: 0.2
+    chargedDamageMultiplier: 1.6
+    holdUntilGrounded: 1
+    swing:
+      keys:
+      - t: 0
+        grip: {x: -0.25, y: 1.6, z: 0.1}
+        blade: {x: -0.09950372, y: 0.5970223, z: -0.79602975}
+      - t: 0.22
+        grip: {x: -0.2, y: 1.75, z: 0}
+        blade: {x: 0, y: 0.34893736, z: -0.93714607}
+      - t: 0.35
+        grip: {x: -0.15, y: 1.3, z: 0.5}
+        blade: {x: 0, y: 0.40613848, z: 0.91381156}
+      - t: 0.55
+        grip: {x: -0.12, y: 0.6, z: 0.55}
+        blade: {x: 0, y: -0.86193424, z: 0.5070201}
+      - t: 0.8
+        grip: {x: -0.12, y: 0.6, z: 0.55}
+        blade: {x: 0, y: -0.86193424, z: 0.5070201}
+      - t: 1
+        grip: {x: -0.32, y: 0.95, z: 0.38}
+        blade: {x: -0.15056568, y: -0.4015085, z: 0.9033941}
+    swingOff:
+      keys:
+      - t: 0
+        grip: {x: 0.25, y: 1.6, z: 0.1}
+        blade: {x: 0.09950372, y: 0.5970223, z: -0.79602975}
+      - t: 0.22
+        grip: {x: 0.2, y: 1.75, z: 0}
+        blade: {x: -0, y: 0.34893736, z: -0.93714607}
+      - t: 0.35
+        grip: {x: 0.15, y: 1.3, z: 0.5}
+        blade: {x: -0, y: 0.40613848, z: 0.91381156}
+      - t: 0.55
+        grip: {x: 0.12, y: 0.6, z: 0.55}
+        blade: {x: -0, y: -0.86193424, z: 0.5070201}
+      - t: 0.8
+        grip: {x: 0.12, y: 0.6, z: 0.55}
+        blade: {x: -0, y: -0.86193424, z: 0.5070201}
+      - t: 1
+        grip: {x: 0.32, y: 0.95, z: 0.38}
+        blade: {x: 0.15056568, y: -0.4015085, z: 0.9033941}
+    hand: 2
+    arcReach: 1.25
+    arcAngle: 140
+    staminaCost: 12
+    damage: 95
+    poiseDamage: 40
+    hitStopTime: 0.0625
+    hyperArmor: 0
+    screenBlur: 0.05
+    speedLines: 0.4
+    spaceCrack: 1
+    useAnimationEvents: 0
+  rollAttack:
+    name: Ambush X
+    animationSlot: RollAttack
+    duration: 0.6
+    hitStart: 0.12
+    hitEnd: 0.24
+    extraHitWindows: []
+    comboWindowStart: 0.06
+    chainTime: 0.34
+    dodgeCancelTime: 0.24
+    moveCancelTime: 0.44
+    trackingEndTime: 0.107999995
+    trackingSpeed: 900
+    lungeDistance: 1.4
+    lungeStart: 0.02
+    lungeEnd: 0.132
+    carryMomentum: 0
+    chargeTimeMax: 0
+    chargeHoldPoint: 0.2
+    chargedDamageMultiplier: 1.6
+    holdUntilGrounded: 0
+    swing:
+      keys:
+      - t: 0
+        grip: {x: 0.2, y: 1.4, z: 0.35}
+        blade: {x: 0.5076731, y: 0.6092077, z: 0.6092077}
+      - t: 0.12
+        grip: {x: 0.1, y: 1.3, z: 0.5}
+        blade: {x: 0.30304578, y: 0.5050762, z: 0.80812204}
+      - t: 0.24
+        grip: {x: -0.55, y: 0.75, z: 0.45}
+        blade: {x: -0.696526, y: -0.5970223, z: 0.39801487}
+      - t: 0.5
+        grip: {x: -0.45, y: 0.8, z: 0.35}
+        blade: {x: -0.5025189, y: -0.5025189, z: 0.70352644}
+      - t: 1
+        grip: {x: -0.32, y: 0.95, z: 0.38}
+        blade: {x: -0.15056568, y: -0.4015085, z: 0.9033941}
+    swingOff:
+      keys:
+      - t: 0
+        grip: {x: -0.2, y: 1.4, z: 0.35}
+        blade: {x: -0.5076731, y: 0.6092077, z: 0.6092077}
+      - t: 0.12
+        grip: {x: -0.1, y: 1.3, z: 0.5}
+        blade: {x: -0.30304578, y: 0.5050762, z: 0.80812204}
+      - t: 0.24
+        grip: {x: 0.55, y: 0.75, z: 0.45}
+        blade: {x: 0.696526, y: -0.5970223, z: 0.39801487}
+      - t: 0.5
+        grip: {x: 0.45, y: 0.8, z: 0.35}
+        blade: {x: 0.5025189, y: -0.5025189, z: 0.70352644}
+      - t: 1
+        grip: {x: 0.32, y: 0.95, z: 0.38}
+        blade: {x: 0.15056568, y: -0.4015085, z: 0.9033941}
+    hand: 2
+    arcReach: 1.25
+    arcAngle: 150
+    staminaCost: 10
+    damage: 60
+    poiseDamage: 22
+    hitStopTime: 0.044999998
+    hyperArmor: 0
+    screenBlur: 0.03
+    speedLines: 0.45
+    spaceCrack: 0
+    useAnimationEvents: 0
+  backstepAttack:
+    name: Recoil X
+    animationSlot: BackstepAttack
+    duration: 0.6
+    hitStart: 0.12
+    hitEnd: 0.24
+    extraHitWindows: []
+    comboWindowStart: 0.06
+    chainTime: 0.34
+    dodgeCancelTime: 0.24
+    moveCancelTime: 0.44
+    trackingEndTime: 0.107999995
+    trackingSpeed: 900
+    lungeDistance: 1.4
+    lungeStart: 0.02
+    lungeEnd: 0.132
+    carryMomentum: 0
+    chargeTimeMax: 0
+    chargeHoldPoint: 0.2
+    chargedDamageMultiplier: 1.6
+    holdUntilGrounded: 0
+    swing:
+      keys:
+      - t: 0
+        grip: {x: 0.2, y: 1.4, z: 0.35}
+        blade: {x: 0.5076731, y: 0.6092077, z: 0.6092077}
+      - t: 0.12
+        grip: {x: 0.1, y: 1.3, z: 0.5}
+        blade: {x: 0.30304578, y: 0.5050762, z: 0.80812204}
+      - t: 0.24
+        grip: {x: -0.55, y: 0.75, z: 0.45}
+        blade: {x: -0.696526, y: -0.5970223, z: 0.39801487}
+      - t: 0.5
+        grip: {x: -0.45, y: 0.8, z: 0.35}
+        blade: {x: -0.5025189, y: -0.5025189, z: 0.70352644}
+      - t: 1
+        grip: {x: -0.32, y: 0.95, z: 0.38}
+        blade: {x: -0.15056568, y: -0.4015085, z: 0.9033941}
+    swingOff:
+      keys:
+      - t: 0
+        grip: {x: -0.2, y: 1.4, z: 0.35}
+        blade: {x: -0.5076731, y: 0.6092077, z: 0.6092077}
+      - t: 0.12
+        grip: {x: -0.1, y: 1.3, z: 0.5}
+        blade: {x: -0.30304578, y: 0.5050762, z: 0.80812204}
+      - t: 0.24
+        grip: {x: 0.55, y: 0.75, z: 0.45}
+        blade: {x: 0.696526, y: -0.5970223, z: 0.39801487}
+      - t: 0.5
+        grip: {x: 0.45, y: 0.8, z: 0.35}
+        blade: {x: 0.5025189, y: -0.5025189, z: 0.70352644}
+      - t: 1
+        grip: {x: 0.32, y: 0.95, z: 0.38}
+        blade: {x: 0.15056568, y: -0.4015085, z: 0.9033941}
+    hand: 2
+    arcReach: 1.25
+    arcAngle: 150
+    staminaCost: 10
+    damage: 60
+    poiseDamage: 22
+    hitStopTime: 0.044999998
+    hyperArmor: 0
+    screenBlur: 0.03
+    speedLines: 0.3
+    spaceCrack: 0
+    useAnimationEvents: 0

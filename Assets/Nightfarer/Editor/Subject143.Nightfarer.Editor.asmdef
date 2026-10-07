@@ -1,0 +1,19 @@
+{
+    "name": "Subject143.Nightfarer.Editor",
+    "rootNamespace": "Subject143.Nightfarer.EditorTools",
+    "references": [
+        "Subject143.Nightfarer",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,557 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40f97c889cb27b347a354a0cf2f76ee1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Subject143.Nightfarer::Subject143.Nightfarer.WeaponData
+  displayName: Greatsword (Wylder-style placeholder)
+  modelPrefab: {fileID: 1795345189660803083, guid: f28b59e493b476c468c98a7105eda6eb, type: 3}
+  attachBone: 18
+  autoGrip: 1
+  gripPositionOffset: {x: 0, y: 0, z: 0}
+  gripRotationOffset: {x: 0, y: 0, z: 0}
+  twoHanded: 1
+  secondGrip: {x: 0, y: 0.16, z: 0}
+  guardPose:
+    t: 0
+    grip: {x: 0.12, y: 1, z: 0.32}
+    blade: {x: 0.14944066, y: 0.7472033, z: 0.64757615}
+  carryPose:
+    t: 0
+    grip: {x: 0.32, y: 0.92, z: 0.05}
+    blade: {x: 0.1506492, y: -0.3515148, z: -0.9239817}
+  claws: 0
+  primaryHand: 17
+  primaryClawLength: 0.26
+  primaryClawRadius: 0.11
+  offClawLength: 0.12
+  offClawRadius: 0.08
+  offGuardPose:
+    t: 0
+    grip: {x: 0.22, y: 0.95, z: 0.25}
+    blade: {x: 0.2, y: 0.3, z: 0.93}
+  bladeStart: {x: 0, y: 0.42, z: 0}
+  bladeEnd: {x: 0, y: 1.55, z: 0}
+  bladeRadius: 0.14
+  movesetVersion: 0
+  lightChain:
+  - name: GS Light 1
+    animationSlot: Light1
+    duration: 1
+    hitStart: 0.36
+    hitEnd: 0.5
+    extraHitWindows: []
+    comboWindowStart: 0.21600002
+    chainTime: 0.62
+    dodgeCancelTime: 0.56
+    moveCancelTime: 0.85
+    trackingEndTime: 0.24
+    trackingSpeed: 540
+    lungeDistance: 0.9
+    lungeStart: 0.126
+    lungeEnd: 0.378
+    carryMomentum: 0
+    chargeTimeMax: 0
+    chargeHoldPoint: 0.2
+    chargedDamageMultiplier: 1.6
+    holdUntilGrounded: 0
+    swing:
+      keys:
+      - t: 0
+        grip: {x: 0.12, y: 1, z: 0.32}
+        blade: {x: 0.14944066, y: 0.7472033, z: 0.64757615}
+      - t: 0.22
+        grip: {x: 0.25, y: 1.55, z: -0.05}
+        blade: {x: 0.3522082, y: 0.5534701, z: -0.7547319}
+      - t: 0.36
+        grip: {x: 0.18, y: 1.3, z: 0.45}
+        blade: {x: 0.2017733, y: 0.55487657, z: 0.8070932}
+      - t: 0.43
+        grip: {x: 0, y: 1.05, z: 0.55}
+        blade: {x: -0.3515148, y: -0.1506492, z: 0.9239817}
+      - t: 0.5
+        grip: {x: -0.22, y: 0.85, z: 0.38}
+        blade: {x: -0.85536283, y: -0.45283914, z: 0.2515773}
+      - t: 0.72
+        grip: {x: -0.15, y: 0.9, z: 0.32}
+        blade: {x: -0.6092077, y: -0.6092077, z: 0.5076731}
+      - t: 1
+        grip: {x: 0.12, y: 1, z: 0.32}
+        blade: {x: 0.14944066, y: 0.7472033, z: 0.64757615}
+    swingOff:
+      keys: []
+    hand: 0
+    arcReach: 1.5
+    arcAngle: 150
+    staminaCost: 18
+    damage: 95
+    poiseDamage: 40
+    hitStopTime: 0.0675
+    hyperArmor: 0
+    screenBlur: 0
+    speedLines: 0
+    spaceCrack: 0
+    useAnimationEvents: 0
+  - name: GS Light 2
+    animationSlot: Light2
+    duration: 1
+    hitStart: 0.34
+    hitEnd: 0.48
+    extraHitWindows: []
+    comboWindowStart: 0.20400001
+    chainTime: 0.62
+    dodgeCancelTime: 0.56
+    moveCancelTime: 0.85
+    trackingEndTime: 0.238
+    trackingSpeed: 540
+    lungeDistance: 0.8
+    lungeStart: 0.119
+    lungeEnd: 0.357
+    carryMomentum: 0
+    chargeTimeMax: 0
+    chargeHoldPoint: 0.2
+    chargedDamageMultiplier: 1.6
+    holdUntilGrounded: 0
+    swing:
+      keys:
+      - t: 0
+        grip: {x: -0.15, y: 0.9, z: 0.32}
+        blade: {x: -0.6092077, y: -0.6092077, z: 0.5076731}
+      - t: 0.22
+        grip: {x: -0.25, y: 1.2, z: 0.15}
+        blade: {x: -0.80812204, y: 0.30304578, z: -0.5050762}
+      - t: 0.34
+        grip: {x: -0.05, y: 1.15, z: 0.5}
+        blade: {x: -0.40406105, y: 0.10101526, z: 0.9091373}
+      - t: 0.41
+        grip: {x: 0.2, y: 1.15, z: 0.48}
+        blade: {x: 0.59925145, y: 0.04993762, z: 0.79900193}
+      - t: 0.48
+        grip: {x: 0.35, y: 1.1, z: 0.2}
+        blade: {x: 0.9785498, y: 0, z: -0.20601049}
+      - t: 0.7
+        grip: {x: 0.25, y: 1.05, z: 0.25}
+        blade: {x: 0.5076731, y: 0.6092077, z: 0.6092077}
+      - t: 1
+        grip: {x: 0.12, y: 1, z: 0.32}
+        blade: {x: 0.14944066, y: 0.7472033, z: 0.64757615}
+    swingOff:
+      keys: []
+    hand: 0
+    arcReach: 1.5
+    arcAngle: 150
+    staminaCost: 18
+    damage: 100
+    poiseDamage: 40
+    hitStopTime: 0.07
+    hyperArmor: 0
+    screenBlur: 0
+    speedLines: 0
+    spaceCrack: 0
+    useAnimationEvents: 0
+  - name: GS Light 3
+    animationSlot: Light3
+    duration: 1.15
+    hitStart: 0.42
+    hitEnd: 0.58
+    extraHitWindows: []
+    comboWindowStart: 0.252
+    chainTime: 0.74
+    dodgeCancelTime: 0.66
+    moveCancelTime: 0.95
+    trackingEndTime: 0.24
+    trackingSpeed: 540
+    lungeDistance: 1.1
+    lungeStart: 0.147
+    lungeEnd: 0.44099995
+    carryMomentum: 0
+    chargeTimeMax: 0
+    chargeHoldPoint: 0.2
+    chargedDamageMultiplier: 1.6
+    holdUntilGrounded: 0
+    swing:
+      keys:
+      - t: 0
+        grip: {x: 0.12, y: 1, z: 0.32}
+        blade: {x: 0.14944066, y: 0.7472033, z: 0.64757615}
+      - t: 0.3
+        grip: {x: 0.05, y: 1.75, z: -0.05}
+        blade: {x: 0.05025443, y: 0.351781, z: -0.9347324}
+      - t: 0.42
+        grip: {x: 0.03, y: 1.6, z: 0.35}
+        blade: {x: 0, y: 0.91381156, z: 0.40613848}
+      - t: 0.5
+        grip: {x: 0, y: 1.1, z: 0.58}
+        blade: {x: 0, y: -0.30113137, z: 0.95358264}
+      - t: 0.58
+        grip: {x: 0, y: 0.72, z: 0.5}
+        blade: {x: 0, y: -0.86193424, z: 0.5070201}
+      - t: 0.8
+        grip: {x: 0.05, y: 0.85, z: 0.45}
+        blade: {x: 0.04993762, y: -0.59925145, z: 0.79900193}
+      - t: 1
+        grip: {x: 0.12, y: 1, z: 0.32}
+        blade: {x: 0.14944066, y: 0.7472033, z: 0.64757615}
+    swingOff:
+      keys: []
+    hand: 0
+    arcReach: 1.5
+    arcAngle: 70
+    staminaCost: 20
+    damage: 120
+    poiseDamage: 55
+    hitStopTime: 0.080000006
+    hyperArmor: 0
+    screenBlur: 0
+    speedLines: 0
+    spaceCrack: 0
+    useAnimationEvents: 0
+  heavyChain:
+  - name: GS Heavy 1 (hold to charge)
+    animationSlot: Heavy1
+    duration: 1.45
+    hitStart: 0.62
+    hitEnd: 0.78
+    extraHitWindows: []
+    comboWindowStart: 0.372
+    chainTime: 0.95
+    dodgeCancelTime: 0.9
+    moveCancelTime: 1.2
+    trackingEndTime: 0.24
+    trackingSpeed: 540
+    lungeDistance: 1
+    lungeStart: 0.217
+    lungeEnd: 0.65099996
+    carryMomentum: 0
+    chargeTimeMax: 1
+    chargeHoldPoint: 0.28
+    chargedDamageMultiplier: 1.6
+    holdUntilGrounded: 0
+    swing:
+      keys:
+      - t: 0
+        grip: {x: 0.12, y: 1, z: 0.32}
+        blade: {x: 0.14944066, y: 0.7472033, z: 0.64757615}
+      - t: 0.19
+        grip: {x: 0.3, y: 1.6, z: -0.2}
+        blade: {x: 0.44943854, y: 0.39950097, z: -0.79900193}
+      - t: 0.36
+        grip: {x: 0.25, y: 1.7, z: -0.15}
+        blade: {x: 0.3562906, y: 0.45808792, z: -0.81437856}
+      - t: 0.45
+        grip: {x: 0.1, y: 1.55, z: 0.35}
+        blade: {x: 0.050702013, y: 0.9126362, z: 0.4056161}
+      - t: 0.5
+        grip: {x: 0, y: 1, z: 0.62}
+        blade: {x: 0, y: -0.19996001, z: 0.97980404}
+      - t: 0.55
+        grip: {x: 0, y: 0.6, z: 0.55}
+        blade: {x: 0, y: -0.9061831, z: 0.42288545}
+      - t: 0.75
+        grip: {x: 0, y: 0.62, z: 0.55}
+        blade: {x: 0, y: -0.9061831, z: 0.42288545}
+      - t: 1
+        grip: {x: 0.12, y: 1, z: 0.32}
+        blade: {x: 0.14944066, y: 0.7472033, z: 0.64757615}
+    swingOff:
+      keys: []
+    hand: 0
+    arcReach: 1.5
+    arcAngle: 80
+    staminaCost: 28
+    damage: 150
+    poiseDamage: 75
+    hitStopTime: 0.095
+    hyperArmor: 1
+    screenBlur: 0
+    speedLines: 0
+    spaceCrack: 0
+    useAnimationEvents: 0
+  - name: GS Heavy 2 (hold to charge)
+    animationSlot: Heavy2
+    duration: 1.4
+    hitStart: 0.58
+    hitEnd: 0.76
+    extraHitWindows: []
+    comboWindowStart: 0.348
+    chainTime: 0.95
+    dodgeCancelTime: 0.88
+    moveCancelTime: 1.15
+    trackingEndTime: 0.24
+    trackingSpeed: 540
+    lungeDistance: 1
+    lungeStart: 0.203
+    lungeEnd: 0.60899997
+    carryMomentum: 0
+    chargeTimeMax: 1
+    chargeHoldPoint: 0.26
+    chargedDamageMultiplier: 1.6
+    holdUntilGrounded: 0
+    swing:
+      keys:
+      - t: 0
+        grip: {x: 0.12, y: 1, z: 0.32}
+        blade: {x: 0.14944066, y: 0.7472033, z: 0.64757615}
+      - t: 0.19
+        grip: {x: 0.4, y: 1.2, z: -0.25}
+        blade: {x: 0.7472033, y: 0.14944066, z: -0.64757615}
+      - t: 0.41
+        grip: {x: 0.25, y: 1.15, z: 0.45}
+        blade: {x: 0.547786, y: 0, z: 0.83661854}
+      - t: 0.46
+        grip: {x: 0, y: 1.1, z: 0.58}
+        blade: {x: 0, y: -0.04993762, z: 0.99875236}
+      - t: 0.52
+        grip: {x: -0.3, y: 1.1, z: 0.42}
+        blade: {x: -0.86193424, y: 0, z: 0.5070201}
+      - t: 0.6
+        grip: {x: -0.35, y: 1.1, z: 0.05}
+        blade: {x: -0.91381156, y: 0, z: -0.40613848}
+      - t: 0.8
+        grip: {x: -0.2, y: 1, z: 0.25}
+        blade: {x: -0.6396022, y: 0.42640144, z: 0.6396022}
+      - t: 1
+        grip: {x: 0.12, y: 1, z: 0.32}
+        blade: {x: 0.14944066, y: 0.7472033, z: 0.64757615}
+    swingOff:
+      keys: []
+    hand: 0
+    arcReach: 1.5
+    arcAngle: 200
+    staminaCost: 28
+    damage: 160
+    poiseDamage: 80
+    hitStopTime: 0.1
+    hyperArmor: 1
+    screenBlur: 0
+    speedLines: 0
+    spaceCrack: 0
+    useAnimationEvents: 0
+  sprintAttack:
+    name: GS Sprint Attack
+    animationSlot: SprintAttack
+    duration: 1.1
+    hitStart: 0.38
+    hitEnd: 0.55
+    extraHitWindows: []
+    comboWindowStart: 0.228
+    chainTime: 0.75
+    dodgeCancelTime: 0.7
+    moveCancelTime: 0.9
+    trackingEndTime: 0.24
+    trackingSpeed: 540
+    lungeDistance: 1.8
+    lungeStart: 0.133
+    lungeEnd: 0.399
+    carryMomentum: 0.5
+    chargeTimeMax: 0
+    chargeHoldPoint: 0.2
+    chargedDamageMultiplier: 1.6
+    holdUntilGrounded: 0
+    swing:
+      keys:
+      - t: 0
+        grip: {x: 0.3, y: 0.95, z: -0.05}
+        blade: {x: 0.20628425, y: -0.3094264, z: -0.9282791}
+      - t: 0.25
+        grip: {x: 0.15, y: 1.7, z: 0}
+        blade: {x: 0.10101526, y: 0.40406105, z: -0.9091373}
+      - t: 0.38
+        grip: {x: 0.05, y: 1.5, z: 0.4}
+        blade: {x: 0, y: 0.91381156, z: 0.40613848}
+      - t: 0.44
+        grip: {x: 0, y: 1, z: 0.62}
+        blade: {x: 0, y: -0.19611615, z: 0.9805807}
+      - t: 0.5
+        grip: {x: 0, y: 0.6, z: 0.55}
+        blade: {x: 0, y: -0.91381156, z: 0.40613848}
+      - t: 0.75
+        grip: {x: 0, y: 0.65, z: 0.55}
+        blade: {x: 0, y: -0.88378793, z: 0.4678877}
+      - t: 1
+        grip: {x: 0.12, y: 1, z: 0.32}
+        blade: {x: 0.14944066, y: 0.7472033, z: 0.64757615}
+    swingOff:
+      keys: []
+    hand: 0
+    arcReach: 1.5
+    arcAngle: 90
+    staminaCost: 22
+    damage: 115
+    poiseDamage: 50
+    hitStopTime: 0.0775
+    hyperArmor: 0
+    screenBlur: 0
+    speedLines: 0
+    spaceCrack: 0
+    useAnimationEvents: 0
+  jumpAttack:
+    name: GS Jump Attack
+    animationSlot: JumpAttack
+    duration: 0.95
+    hitStart: 0.3
+    hitEnd: 0.52
+    extraHitWindows: []
+    comboWindowStart: 0.18
+    chainTime: 0.72
+    dodgeCancelTime: 0.68
+    moveCancelTime: 0.8
+    trackingEndTime: 0.21000001
+    trackingSpeed: 540
+    lungeDistance: 0
+    lungeStart: 0.105000004
+    lungeEnd: 0.315
+    carryMomentum: 1
+    chargeTimeMax: 0
+    chargeHoldPoint: 0.2
+    chargedDamageMultiplier: 1.6
+    holdUntilGrounded: 1
+    swing:
+      keys:
+      - t: 0
+        grip: {x: 0.1, y: 1.6, z: 0.1}
+        blade: {x: 0.09950372, y: 0.5970223, z: -0.79602975}
+      - t: 0.25
+        grip: {x: 0.05, y: 1.8, z: 0}
+        blade: {x: 0, y: 0.34893736, z: -0.93714607}
+      - t: 0.38
+        grip: {x: 0.03, y: 1.4, z: 0.5}
+        blade: {x: 0, y: 0.50262046, z: 0.8645072}
+      - t: 0.52
+        grip: {x: 0, y: 0.8, z: 0.58}
+        blade: {x: 0, y: -0.8, z: 0.6}
+      - t: 0.8
+        grip: {x: 0, y: 0.8, z: 0.55}
+        blade: {x: 0, y: -0.8, z: 0.6}
+      - t: 1
+        grip: {x: 0.12, y: 1, z: 0.32}
+        blade: {x: 0.14944066, y: 0.7472033, z: 0.64757615}
+    swingOff:
+      keys: []
+    hand: 0
+    arcReach: 1.5
+    arcAngle: 100
+    staminaCost: 20
+    damage: 130
+    poiseDamage: 60
+    hitStopTime: 0.085
+    hyperArmor: 0
+    screenBlur: 0
+    speedLines: 0
+    spaceCrack: 0
+    useAnimationEvents: 0
+  rollAttack:
+    name: GS Roll Attack
+    animationSlot: RollAttack
+    duration: 0.95
+    hitStart: 0.28
+    hitEnd: 0.42
+    extraHitWindows: []
+    comboWindowStart: 0.16800001
+    chainTime: 0.6
+    dodgeCancelTime: 0.55
+    moveCancelTime: 0.8
+    trackingEndTime: 0.196
+    trackingSpeed: 540
+    lungeDistance: 0.9
+    lungeStart: 0.098
+    lungeEnd: 0.294
+    carryMomentum: 0
+    chargeTimeMax: 0
+    chargeHoldPoint: 0.2
+    chargedDamageMultiplier: 1.6
+    holdUntilGrounded: 0
+    swing:
+      keys:
+      - t: 0
+        grip: {x: 0.2, y: 0.7, z: 0.3}
+        blade: {x: 0.30304578, y: -0.80812204, z: 0.5050762}
+      - t: 0.18
+        grip: {x: 0.3, y: 0.75, z: 0.1}
+        blade: {x: 0.5025189, y: -0.70352644, z: -0.5025189}
+      - t: 0.3
+        grip: {x: 0.15, y: 1.1, z: 0.5}
+        blade: {x: 0.20051196, y: 0.30076793, z: 0.93238056}
+      - t: 0.42
+        grip: {x: 0.05, y: 1.6, z: 0.35}
+        blade: {x: 0, y: 0.95358264, z: 0.30113137}
+      - t: 0.6
+        grip: {x: 0.1, y: 1.5, z: 0.2}
+        blade: {x: 0.10101526, y: 0.9091373, z: -0.40406105}
+      - t: 1
+        grip: {x: 0.12, y: 1, z: 0.32}
+        blade: {x: 0.14944066, y: 0.7472033, z: 0.64757615}
+    swingOff:
+      keys: []
+    hand: 0
+    arcReach: 1.5
+    arcAngle: 100
+    staminaCost: 16
+    damage: 90
+    poiseDamage: 35
+    hitStopTime: 0.065000005
+    hyperArmor: 0
+    screenBlur: 0
+    speedLines: 0
+    spaceCrack: 0
+    useAnimationEvents: 0
+  backstepAttack:
+    name: GS Backstep Thrust
+    animationSlot: BackstepAttack
+    duration: 0.9
+    hitStart: 0.3
+    hitEnd: 0.42
+    extraHitWindows: []
+    comboWindowStart: 0.18
+    chainTime: 0.6
+    dodgeCancelTime: 0.55
+    moveCancelTime: 0.78
+    trackingEndTime: 0.21000001
+    trackingSpeed: 540
+    lungeDistance: 1.2
+    lungeStart: 0.105000004
+    lungeEnd: 0.315
+    carryMomentum: 0
+    chargeTimeMax: 0
+    chargeHoldPoint: 0.2
+    chargedDamageMultiplier: 1.6
+    holdUntilGrounded: 0
+    swing:
+      keys:
+      - t: 0
+        grip: {x: 0.12, y: 1, z: 0.32}
+        blade: {x: 0.14944066, y: 0.7472033, z: 0.64757615}
+      - t: 0.2
+        grip: {x: 0.15, y: 1.15, z: 0}
+        blade: {x: 0, y: 0.09950372, z: 0.99503714}
+      - t: 0.33
+        grip: {x: 0.05, y: 1.2, z: 0.65}
+        blade: {x: 0, y: 0.04993762, z: 0.99875236}
+      - t: 0.5
+        grip: {x: 0.05, y: 1.2, z: 0.62}
+        blade: {x: 0, y: 0.04993762, z: 0.99875236}
+      - t: 1
+        grip: {x: 0.12, y: 1, z: 0.32}
+        blade: {x: 0.14944066, y: 0.7472033, z: 0.64757615}
+    swingOff:
+      keys: []
+    hand: 0
+    arcReach: 1.5
+    arcAngle: 50
+    staminaCost: 16
+    damage: 85
+    poiseDamage: 30
+    hitStopTime: 0.0625
+    hyperArmor: 0
+    screenBlur: 0
+    speedLines: 0
+    spaceCrack: 0
+    useAnimationEvents: 0

@@ -2,41 +2,64 @@ using UnityEngine;
 
 public class ResetState : EnvironmentInteractionState
 {
-    float t;
+    private const float RotateSpeed = 500f;
+    private const float MinTimeInState = 0.15f;
 
-    public ResetState(EnvironmentInteractionContext c, EnvironmentInteractionStateMachine.EEnvironmentInteractionState k) : base(c, k) {}
+    private float _t;
+
+    public ResetState(EnvironmentInteractionContext c, EnvironmentInteractionStateMachine.EEnvironmentInteractionState k) : base(c, k) { }
 
     public override void EnterState()
     {
-        t = 0;
+        _t = 0f;
         ctx.CurrentIntersectingCollider = null;
         ctx.ClosestPoint = Vector3.positiveInfinity;
+        ctx.LowestDistance = Mathf.Infinity;
+        ctx.TargetVelocity = Vector3.zero;
+        ctx.HintVelocity = Vector3.zero;
     }
 
     public override void UpdateState()
     {
-        t += Time.deltaTime;
+        _t += Time.deltaTime;
 
-        ctx.CurrentIK.weight = Mathf.Lerp(ctx.CurrentIK.weight, 0, t);
-        ctx.CurrentRot.weight = Mathf.Lerp(ctx.CurrentRot.weight, 0, t);
+        float speed = ctx.Settings.weightSmoothSpeed;
+        float k = 1f - Mathf.Exp(-speed * Time.deltaTime);
+
+        ctx.CurrentIK.weight = SmoothWeight(ctx.CurrentIK.weight, 0f, speed);
+        ctx.CurrentRot.weight = SmoothWeight(ctx.CurrentRot.weight, 0f, speed);
 
         ctx.CurrentTarget.localPosition =
-            Vector3.Lerp(ctx.CurrentTarget.localPosition, ctx.CurrentOriginalPos, t);
+            Vector3.Lerp(ctx.CurrentTarget.localPosition, ctx.CurrentOriginalPos, k);
 
         ctx.CurrentTarget.rotation =
-            Quaternion.RotateTowards(ctx.CurrentTarget.rotation, ctx.OriginalRot, 500 * Time.deltaTime);
+            Quaternion.RotateTowards(ctx.CurrentTarget.rotation, ctx.CurrentOriginalRot, RotateSpeed * Time.deltaTime);
+
+        if (ctx.CurrentHint != null)
+        {
+            ctx.CurrentHint.localPosition =
+                Vector3.Lerp(ctx.CurrentHint.localPosition, ctx.CurrentOriginalHintPos, k);
+        }
     }
 
     public override EnvironmentInteractionStateMachine.EEnvironmentInteractionState GetNextState()
     {
-        if (t > 2f && ctx.Rb.linearVelocity != Vector3.zero)
+        bool retracted = ctx.CurrentIK.weight < 0.01f;
+        bool moving = ctx.CharacterVelocity.sqrMagnitude > 0.01f;
+
+        if (_t > MinTimeInState && retracted && moving)
             return EnvironmentInteractionStateMachine.EEnvironmentInteractionState.Search;
 
         return StateKey;
     }
 
-    public override void ExitState() {}
-    public override void OnTriggerEnter(Collider o) {}
-    public override void OnTriggerStay(Collider o) {}
-    public override void OnTriggerExit(Collider o) {}
+    public override void ExitState()
+    {
+        ctx.CurrentIK.weight = 0f;
+        ctx.CurrentRot.weight = 0f;
+    }
+
+    public override void OnTriggerEnter(Collider o) { }
+    public override void OnTriggerStay(Collider o) { }
+    public override void OnTriggerExit(Collider o) { }
 }
