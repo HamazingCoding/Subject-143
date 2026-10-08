@@ -120,7 +120,12 @@ namespace Subject143.Nightfarer
             Vitals = GetComponent<NightfarerVitals>();
             if (input == null) input = inputSource as INightfarerInputSource;
             if (input == null) input = GetComponent<INightfarerInputSource>();
-            Motor.Landed += (height, speed) => State?.OnLanded(height, speed);
+            Motor.Landed += (height, speed) =>
+            {
+                if (footIK != null) footIK.Impact(speed);
+                if (cameraRig != null) cameraRig.LandingDip(speed);
+                State?.OnLanded(height, speed);
+            };
             if (hitbox != null) hitbox.Hit += OnWeaponHit;
             if (eventRelay != null) eventRelay.EventRaised += e => State?.OnAnimationEvent(e);
             // Measure the rig while it is still in its bind pose (before the Animator's first update).
@@ -339,6 +344,8 @@ namespace Subject143.Nightfarer
             float accel = IsSurging && SurgeBurstRemaining > 0f ? cfg.surgeAcceleration : fast ? cfg.sprintAcceleration : cfg.acceleration;
             SurgeBurstRemaining -= dt;
 
+            float now = Motor.PlanarSpeed;
+            float braking = BrakingFor(now);
             Vector3 targetVelocity = Vector3.zero;
             if (locked)
             {
@@ -347,17 +354,57 @@ namespace Subject143.Nightfarer
             }
             else if (moving)
             {
-                Motor.FaceDirection(dir, fast ? cfg.sprintTurnSpeed : cfg.turnSpeed, dt);
-                // Sprinting carries momentum: velocity follows the body, so sharp turns arc.
+                // Commitment grows with speed: the faster he goes, the slower he can turn.
+                float turn = TurnRateFor(now);
+                Motor.FaceDirection(dir, turn, dt);
+                if (now > cfg.walkSpeed * 0.5f && now <= cfg.runSpeed * 1.05f && Vector3.Angle(Motor.PlanarVelocity, dir) < cfg.pivotAngle)
+                {
+                    // Running: full grip. The velocity swings round with the body at the turn rate, keeping its speed.
+                    Vector3 h = Vector3.RotateTowards(Motor.PlanarVelocity / now, fast ? transform.forward : dir, turn * Mathf.Deg2Rad * dt, 0f);
+                    Motor.SetPlanarVelocity(h * Mathf.MoveTowards(now, speed, (speed > now ? accel : braking) * dt));
+                    MovementMode = locked ? "Strafe" : walk ? "Walk" : "Run";
+                    return;
+                }
+                if (now > cfg.runSpeed * 1.05f)
+                {
+                    // Momentum regime: the body turns first and the velocity follows it with less grip (drift);
+                    // sliding sideways bleeds speed.
+                    Vector3 heading = Motor.PlanarVelocity / now;
+                    heading = Vector3.RotateTowards(heading, transform.forward, turn * cfg.driftGrip * Mathf.Deg2Rad * dt, 0f);
+                    float slip = Vector3.Angle(heading, transform.forward) * Mathf.Deg2Rad;
+                    float s = Mathf.MoveTowards(now, speed, (speed > now ? accel : braking) * dt);
+                    s = Mathf.Max(0f, s - cfg.driftDrag * Mathf.Sin(slip) * dt);
+                    Motor.SetPlanarVelocity(heading * s);
+                    MovementMode = IsSurging ? "Surge Sprint" : sprint ? "Sprint" : "Run (momentum)";
+                    if (slip > 12f * Mathf.Deg2Rad) MovementMode += " (drift)";
+                    return;
+                }
                 targetVelocity = fast ? transform.forward * speed : dir * speed;
             }
-            Motor.Accelerate(targetVelocity, accel, cfg.deceleration, dt);
+            Motor.Accelerate(targetVelocity, accel, braking, dt);
 
             MovementMode = IsSurging ? "Surge Sprint"
                 : sprint ? "Sprint"
                 : !moving ? (Motor.PlanarSpeed > 0.2f ? "Decelerating" : "Idle")
                 : locked ? (walk ? "Strafe Walk" : "Strafe Run")
                 : (walk ? "Walk" : "Run");
+        }
+
+        /// <summary>Turn rate (deg/s) at a planar speed: turnSpeed at walk falling to minTurnSpeed at surge.</summary>
+        public float TurnRateFor(float speed)
+        {
+            var c = Config;
+            float s01 = Mathf.InverseLerp(c.walkSpeed, c.surgeSpeed, speed);
+            return Mathf.Lerp(c.turnSpeed, Mathf.Min(c.turnSpeed, c.minTurnSpeed), Mathf.Pow(s01, c.turnFalloff));
+        }
+
+        /// <summary>Braking (m/s^2) at a planar speed: 'deceleration' up to run, easing to the sprint / surge values.</summary>
+        public float BrakingFor(float speed)
+        {
+            var c = Config;
+            if (speed <= c.runSpeed) return c.deceleration;
+            if (speed <= c.sprintSpeed) return Mathf.Lerp(c.deceleration, c.sprintDeceleration, Mathf.InverseLerp(c.runSpeed, c.sprintSpeed, speed));
+            return Mathf.Lerp(c.sprintDeceleration, c.surgeDeceleration, Mathf.InverseLerp(c.sprintSpeed, c.surgeSpeed, speed));
         }
 
         /// <summary>Start whatever the buffered input asks for, if allowed. Returns true if the state changed.</summary>
@@ -506,10 +553,22 @@ namespace Subject143.Nightfarer
             float cost = Config.jumpStaminaCost + (IsSurging ? Config.surgeJumpExtraStamina : 0f);
             if (!Vitals.TryConsume(cost)) return false;
             ConsumeBuffer();
-            if (MomentumTimer > 0f) LaunchMomentumJump();
+            bool momentum = MomentumTimer > 0f;
+            if (Config.jumpSquatTime > 0f && Motor.Grounded)
+            {
+                ChangeState(new JumpSquatState(this, momentum));   // brief crouch, then the jump
+                return true;
+            }
+            LaunchJump(momentum);
+            return true;
+        }
+
+        /// <summary>Leave the ground now (normal jump, or a momentum jump while carrying claw-line speed).</summary>
+        public void LaunchJump(bool momentum)
+        {
+            if (momentum) LaunchMomentumJump();
             else Motor.Jump(Config.jumpHeight);
             ChangeState(new AirborneState(this, true));
-            return true;
         }
 
         /// <summary>Jump that keeps (and boosts) the claw line's momentum: Wylder's hook-and-leap.</summary>
@@ -563,9 +622,11 @@ namespace Subject143.Nightfarer
             if (!Motor.Grounded || !jumpDown) return false;
             if (ActiveSpring != null) return TryJump();
             // Surge sprinting: no crouch and no slowdown, he keeps running while it charges.
-            ChangeState(new SuperJumpChargeState(this, IsSurging && Motor.PlanarSpeed > Config.sprintSpeed));
+            ChangeState(new SuperJumpChargeState(this, (IsSurging || IsSprinting) && Motor.PlanarSpeed > Config.runSpeed * 1.05f));
             return true;
         }
+
+        public void FaceDirectionInstant(Vector3 dir) => Motor.FaceDirection(dir, 0f, 0f);
 
         public bool TryAttack(AttackData attack, AttackKind kind, int chainIndex)
         {

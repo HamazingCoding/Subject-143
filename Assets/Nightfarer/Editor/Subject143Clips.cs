@@ -57,12 +57,13 @@ namespace Subject143.Nightfarer.EditorTools
                 (0.46f, "SF=1.0 CF=0.5 RootDrop=-0.3 RootPitch=10 LUF=1.0 LLS=0.05 RUF=0.4 RLS=0.3"),
                 (0.65f, "SF=0.9 RootDrop=-0.28"),
                 (0.85f, ""));
-            Make("Heavy1", 0.95f, false, (0f, ""),
-                (0.15f, "SF=0.1 CF=-0.25 ST=-0.5 RootDrop=-0.12 LUF=0.9 LLS=0.2 RUF=0.9 RLS=0.2"),
-                (0.42f, "SF=-0.1 CF=-0.3 ST=-0.3 RootDrop=0.05 LUF=0.5 LLS=0.8 RUF=0.2 RLS=0.9"),
-                (0.52f, "SF=0.95 CF=0.4 ST=0.3 RootDrop=-0.25 LUF=1.0 LLS=0.1 RUF=0.1 RLS=0.5"),
-                (0.75f, "SF=0.85 RootDrop=-0.22"),
-                (0.95f, ""));
+            Make("Heavy1", 1.0f, false, (0f, ""),
+                (0.14f, "ST=-0.55 CT=-0.5 UT=-0.3 SF=0.2 RootYaw=25 RootDrop=-0.1 LUF=0.4 LLS=0.6 RUF=0.9 RLS=0.25"),
+                (0.37f, "ST=-0.8 CT=-0.7 UT=-0.4 SF=0.1 CF=-0.15 HN=0.2 RootYaw=40 RootDrop=-0.14 LUF=0.3 LLS=0.7 RUF=1.0 RLS=0.2"),
+                (0.5f, "ST=0.3 CT=0.3 SF=0.45 RootYaw=-10 RootDrop=-0.2 LUF=1.0 LLS=0.15 RUF=0.4 RLS=0.5"),
+                (0.62f, "ST=0.8 CT=0.7 UT=0.4 SF=0.5 RootYaw=-45 RootDrop=-0.22 LUF=1.0 LLS=0.1 RUF=0.3 RLS=0.6"),
+                (0.82f, "ST=0.5 CT=0.4 SF=0.35 RootYaw=-20 RootDrop=-0.12"),
+                (1.0f, ""));
             Make("Heavy2", 0.9f, false, (0f, ""),
                 (0.15f, "ST=-0.7 CT=-0.6 RootDrop=-0.12 RootYaw=40"),
                 (0.35f, "ST=0.2 RootYaw=-60 RootDrop=-0.15 SL=0.2"),
@@ -159,6 +160,10 @@ namespace Subject143.Nightfarer.EditorTools
                 (0.35f, "RootDrop=-0.4 SF=0.65 CF=0.3 HN=0.5 NN=0.15 RUF=0.15 RLS=-0.95 LUF=0.95 LLS=-0.35 RAD=0.05 RAF=-0.6"),
                 (0.7f, "RootDrop=-0.25 SF=0.45 HN=0.3 RUF=0.6 RLS=0.0 LUF=0.8 LLS=0.0"),
                 (1f, ""));
+            // Skid: lean back hard against the momentum, knees bent, arms flung back for balance.
+            Make("Skid", 0.6f, false,
+                (0f, "RootPitch=-14 SF=-0.15 CF=-0.1 HN=0.25 RootDrop=-0.14 LUF=0.85 LLS=0.45 RUF=0.55 RLS=0.7 RAD=-0.1 RAF=-0.5 LAD=-0.1 LAF=-0.4"),
+                (0.6f, "RootPitch=-12 SF=-0.1 CF=-0.1 HN=0.2 RootDrop=-0.13 LUF=0.8 LLS=0.5 RUF=0.55 RLS=0.7 RAD=-0.1 RAF=-0.45 LAD=-0.1 LAF=-0.35"));
             // Side hops: lean and tuck into the direction, land in a crouch.
             Make("SideJumpL", 0.55f, false, (0f, "SF=0.3 RootDrop=-0.12 LUF=0.7 RUF=0.7"),
                 (0.15f, "RootRoll=28 SL=0.4 CL=0.3 SF=0.3 LUF=1.0 LLS=-0.5 RUF=1.0 RLS=-0.5 RAD=0.3 LAD=0.1"),

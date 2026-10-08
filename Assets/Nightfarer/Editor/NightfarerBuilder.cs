@@ -500,6 +500,7 @@ namespace Subject143.Nightfarer.EditorTools
             var ik = player.AddComponent<WeaponIK>();
             player.AddComponent<FlashStepVFX>();
             var feet = player.AddComponent<FootIK>();
+            player.AddComponent<MomentumPose>().character = null;   // resolved at runtime (GetComponent)
             var combatFx = player.AddComponent<CombatFX>();
 
             var visual = new GameObject("Visual").transform;

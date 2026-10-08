@@ -45,6 +45,7 @@ MonoBehaviour:
     carryMomentum: 0
     chargeTimeMax: 0
     chargeHoldPoint: 0.2
+    chargeHoldEnd: -1
     chargedDamageMultiplier: 1.6
     holdUntilGrounded: 0
     swing:

@@ -477,6 +477,7 @@ if COAT:
     # Meshy fuses the sleeve's underside to the coat's side; when the arm moves away that strip becomes a
     # membrane from armpit to hand. Cut the faces joining sleeve and body below the armpit.
     import bmesh
+    from collections import deque
     bm = bmesh.new()
     bm.from_mesh(coat.data)
     bm.verts.ensure_lookup_table()
@@ -496,6 +497,51 @@ if COAT:
     verts = [verts[k] for k in keep]
     sleeve_info = [sleeve_info[k] for k in keep]
     print("COAT underarm cut: %d faces" % len(cut))
+    # Small pieces the cut detached (bits of sleeve) would stay behind on the torso chains and float beside him when
+    # the arm moves: skin them to the nearest arm instead (or drop them if they're nowhere near an arm).
+    adj2 = [[] for _ in verts]
+    for poly in coat.data.polygons:                 # face connectivity (the cut leaves bare edges behind)
+        pv = list(poly.vertices)
+        for q in range(len(pv)):
+            adj2[pv[q]].append(pv[q - 1]); adj2[pv[q - 1]].append(pv[q])
+    seen2, islands = set(), []
+    for s0 in range(len(verts)):
+        if s0 in seen2:
+            continue
+        comp, dq = [], deque([s0]); seen2.add(s0)
+        while dq:
+            k = dq.popleft(); comp.append(k)
+            for m in adj2[k]:
+                if m not in seen2:
+                    seen2.add(m); dq.append(m)
+        islands.append(comp)
+    islands.sort(key=len, reverse=True)
+    print("COAT islands after cut:", [len(c) for c in islands[:6]])
+    drop = []
+    for comp in islands[1:]:
+        if len(comp) > 0.05 * len(verts):
+            continue
+        cen = sum((verts[i] for i in comp), Vector()) / len(comp)
+        best = None
+        for side, (a0, b0) in arms.items():
+            d, t = seg_dist(cen, a0, b0)
+            if best is None or d < best[1]:
+                best = (side, d, max(0.16, t))
+        if best is not None and best[1] < 0.18 * S:
+            for i in comp:
+                sleeve_info[i] = best
+            print("COAT island of %d verts reattached to the %s arm" % (len(comp), best[0]))
+        else:
+            drop.extend(comp)
+    if drop:
+        bm = bmesh.new(); bm.from_mesh(coat.data); bm.verts.ensure_lookup_table()
+        dset = set(drop)
+        bmesh.ops.delete(bm, geom=[bm.verts[i] for i in drop], context="VERTS")
+        bm.to_mesh(coat.data); bm.free(); coat.data.update()
+        keep2 = [i for i in range(len(verts)) if i not in dset]
+        verts = [verts[i] for i in keep2]
+        sleeve_info = [sleeve_info[i] for i in keep2]
+        print("COAT dropped %d stray verts" % len(drop))
     print("COAT sleeves: %d left, %d right verts" % (sum(1 for x in sleeve_info if x and x[0] == "Left"), sum(1 for x in sleeve_info if x and x[0] == "Right")))
 
     def ang(p):

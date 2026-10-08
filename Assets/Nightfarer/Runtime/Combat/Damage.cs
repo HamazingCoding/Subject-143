@@ -10,6 +10,8 @@ namespace Subject143.Nightfarer
         public Vector3 direction;
         public GameObject source;
         public string attackName;
+        /// <summary>Push-back distance (m); grows with the attacker's approach speed.</summary>
+        public float knockback;
     }
 
     /// <summary>Anything that can be hit. Found with GetComponentInParent from the collider that was hit.</summary>

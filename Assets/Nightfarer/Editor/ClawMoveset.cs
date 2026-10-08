@@ -51,11 +51,11 @@ namespace Subject143.Nightfarer.EditorTools
         }
 
         /// <summary>Bump when the moveset changes: existing weapon assets are rebuilt on the next build.</summary>
-        public const int Version = 3;
+        public const int Version = 4;
 
         /// <summary>
         /// Beast-style claw moveset (original, in the spirit of feral claw weapons): fast alternating swipes that
-        /// build into a multi-hit frenzy and a pouncing maul; heavies are the charged pouncing rake and thorn whirl.
+        /// build into a multi-hit frenzy and a pouncing maul; heavies are the charged reaver sweep and thorn whirl.
         /// </summary>
         public static void Build(WeaponData w)
         {
@@ -132,15 +132,20 @@ namespace Subject143.Nightfarer.EditorTools
             l5.swingOff = MirrorPath(l5.swing);
             w.lightChain = new List<AttackData> { l1, l2, l3, l4, l5 };
 
-            // Heavy 1: charged pounce-rake, main claw overhead (hold to charge: he keeps winding it up, hyper armour).
-            var h1 = A("Pouncing Rake (hold to charge)", "Heavy1", 0.95f, 0.4f, 0.52f, 0.62f, 0.5f, 0.78f, 1.6f, 20f, 120f, 55f, ClawHand.Primary, 100f);
-            h1.chargeTimeMax = 0.8f; h1.chargeHoldPoint = 0.15f; h1.chargeHoldEnd = 0.34f; h1.hyperArmor = true; h1.chargedDamageMultiplier = 1.7f;
+            // Heavy 1: Reaver Sweep: the mutated arm hauls far back and out to the side while charging (winding up slowly),
+            // then whips through a wide horizontal arc in front of him and follows through past the other shoulder.
+            var h1 = A("Reaver Sweep (hold to charge)", "Heavy1", 1.0f, 0.42f, 0.6f, 0.7f, 0.58f, 0.82f, 1.0f, 20f, 125f, 55f, ClawHand.Primary, 210f);
+            h1.chargeTimeMax = 0.9f; h1.chargeHoldPoint = 0.14f; h1.chargeHoldEnd = 0.37f; h1.hyperArmor = true; h1.chargedDamageMultiplier = 1.8f;
+            h1.arcReach = 1.5f;
+            h1.lungeStart = 0.38f; h1.lungeEnd = 0.5f;
             h1.swing = P(G(0f),
-                K(0.16f, -0.45f, 1.7f, -0.2f, -0.3f, 0.5f, -0.8f),
-                K(0.4f, -0.3f, 1.6f, 0.4f, 0f, 0.9f, 0.4f),
-                K(0.47f, -0.15f, 0.9f, 0.7f, 0.1f, -0.6f, 0.8f),
-                K(0.55f, -0.1f, 0.45f, 0.55f, 0.1f, -0.95f, 0.3f),
-                K(0.75f, -0.1f, 0.47f, 0.55f, 0.1f, -0.95f, 0.3f),
+                K(0.14f, -0.7f, 1.1f, -0.2f, -0.85f, 0.05f, -0.45f),
+                K(0.37f, -0.75f, 1.2f, -0.5f, -0.55f, 0.15f, -0.8f),
+                K(0.45f, -0.55f, 1.05f, 0.45f, -0.35f, -0.05f, 0.95f),
+                K(0.51f, 0.0f, 1.0f, 0.8f, 0.35f, -0.08f, 0.93f),
+                K(0.57f, 0.55f, 0.98f, 0.45f, 0.95f, -0.1f, 0.25f),
+                K(0.64f, 0.7f, 0.98f, -0.1f, 0.75f, -0.15f, -0.6f),
+                K(0.85f, 0.3f, 0.95f, 0.15f, 0.5f, -0.3f, 0.8f),
                 G(1f));
             // Heavy 2: spinning sweep with both claws out (full circle).
             var h2 = A("Thorn Whirl (hold to charge)", "Heavy2", 0.9f, 0.32f, 0.5f, 0.6f, 0.48f, 0.74f, 0.8f, 20f, 110f, 50f, ClawHand.Both, 360f);

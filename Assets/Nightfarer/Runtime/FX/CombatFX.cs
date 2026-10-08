@@ -49,7 +49,7 @@ namespace Subject143.Nightfarer
 
         void Start() => BuildSurgeLines();
 
-        /// <summary>Speed streaks off the body while surge sprinting (head, shoulders, elbows, knees).</summary>
+        /// <summary>Speed streaks off the legs while surge sprinting.</summary>
         void BuildSurgeLines()
         {
             var anim = character != null && character.Animator != null ? character.Animator.animator : null;
@@ -57,8 +57,7 @@ namespace Subject143.Nightfarer
             var g = new Gradient();
             g.SetKeys(new[] { new GradientColorKey(Color.white, 0f), new GradientColorKey(new Color(0.75f, 0.7f, 1f), 1f) },
                       new[] { new GradientAlphaKey(0.75f, 0f), new GradientAlphaKey(0.3f, 0.4f), new GradientAlphaKey(0f, 1f) });
-            foreach (var hb in new[] { HumanBodyBones.Head, HumanBodyBones.LeftUpperArm, HumanBodyBones.RightUpperArm,
-                                       HumanBodyBones.LeftLowerArm, HumanBodyBones.RightLowerArm, HumanBodyBones.LeftLowerLeg, HumanBodyBones.RightLowerLeg })
+            foreach (var hb in new[] { HumanBodyBones.LeftLowerLeg, HumanBodyBones.RightLowerLeg, HumanBodyBones.LeftFoot, HumanBodyBones.RightFoot })
             {
                 var bone = anim.GetBoneTransform(hb);
                 if (bone == null) continue;
@@ -156,9 +155,18 @@ namespace Subject143.Nightfarer
             return 0;
         }
 
+        float nextSpark;
+
         void SurgeLines()
         {
             bool on = character.IsSurging && character.Motor.PlanarSpeed > character.Config.sprintSpeed * 0.9f;
+            // The dragging claw scrapes sparks off the ground.
+            if (on && character.Motor.Grounded && Time.time >= nextSpark && character.Hitbox.TryGetSegment(0, out _, out var tip) &&
+                tip.y - character.transform.position.y < 0.15f)
+            {
+                nextSpark = Time.time + 0.035f;
+                ClawSparks.Emit(tip, -character.Motor.PlanarVelocity.normalized, 2);
+            }
             SurgeLinesEmitting = on;
             foreach (var s in surgeLines)
             {
@@ -167,7 +175,6 @@ namespace Subject143.Nightfarer
                 s.trail.transform.position = s.bone.position + s.offset;
                 s.trail.emitting = on;
             }
-            if (on) ScreenFX.SpeedLines(0.32f, 0.25f);
         }
 
         void AttackPulses()

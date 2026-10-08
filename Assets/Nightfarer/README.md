@@ -56,16 +56,39 @@
 - **Default animation set:** upright locomotion. The feral set is on F2. Climbing, vaulting, the flask, the super
   jump crouch, the hero landing and the side jumps have upright clips (`S143U_*`) in the default set and hunched
   ones (`S143_*`) in the feral set.
+- **Movement feel (design pillars: momentum, commitment, explosive power):** set every build in
+  `Subject143Builder.ConfigureTraversal`; the values live on `Config_Subject143`.
+  - Acceleration about 0.35 s to run. Braking 20 at run, 9 at sprint, 6 at surge (m/s²).
+  - Letting go at sprint speed or above **skids** (feet plant, lean back, dust). Reversing more than 120° at speed
+    is a **pivot-skid** (brake, plant, relaunch). Flash step, attacks and jumps cancel skids.
+  - The turn rate falls with speed, from 1080°/s at walk to 150°/s at surge. Above run speed the velocity follows
+    the body with less grip, so he **drifts** and loses speed sliding sideways. Running keeps full grip.
+  - **Zero air control:** the takeoff vector is final; the claw line is the only mid-air redirect. Spirit springs
+    keep their steering.
+  - Every jump starts with a 0.07 s **crouch**.
+  - **Sprint launches** (hold Jump while sprinting or surging) multiply the speed he has built, up to 28 m/s, and
+    fly flatter.
+  - **Landings keep momentum:** a fast hero landing slides on with the claw dragging and sparking. Landings
+    compress the pelvis in proportion to impact (FootIK spring).
+  - **Combat momentum:** lights keep 30% of approach speed, sprint-attack lunges scale with speed, knockback grows
+    with speed, and a flash step out of a sprint keeps the sprint speed.
+  - **Body language:** `MomentumPose` banks the body into turns (more at higher speed) and pitches it with
+    acceleration and braking. At surge the claw arm drags and scrapes sparks.
+  - **Camera:** FOV 55/58/63/70 by speed, pulls back up to 0.6 m at surge, rolls up to 2° in surge turns, and dips
+    on landings.
+  - `NightfarerPlaytest` measures all of this. Logs go to `Logs/nightfarer_playtest.txt`; captures go to
+    `body_language.png`.
 - **Arms at rest:** idle and walking, both arms hang at his sides. The claws come up into the ready pose only
   when locked on, or for 2.5 s after attacking or being hit.
 - **Claw moveset (v2, beast-style):**
   - Lights: Beast Swipe → Counter Swipe → Twin Rake → Frenzy (three separate hits) → Mauling Pounce.
-  - Heavies (hold to charge): Savage Lunge and Beast Maul (two slams).
+  - Heavies (hold to charge): Reaver Sweep (the mutated arm hauls back while charging, then whips through a
+    wide arc) and Thorn Whirl. Charging keeps winding up slowly, Elden Ring style (`chargeHoldEnd`).
   - Also Prowling Lunge (sprint), Falling Maul (jump), and Ambush X / Recoil X (out of a flash step).
   - Attacks can have several hit windows (`extraHitWindows`). The weapon asset rebuilds when
     `ClawMoveset.Version` changes.
   - These are original animations, not Elden Ring's; its assets can't be used.
-- **Surge sprint:** speed streaks off the body and light screen speed lines. Holding Jump while surging charges
+- **Surge sprint:** speed streaks off the legs. Holding Jump while surging charges
   the super jump without a crouch or slowdown; release for the big jump at full speed.
 - **Hair strands:** the rig script (`--hair-strands 8`) finds curly locks that stick out of the hair mass
   (horns and thorns are excluded) and gives each a 3-bone chain on Head. A second `ChainCloth` with the
@@ -223,7 +246,9 @@ from the T-pose forearm axis, as with the Meshy rig.
 
 ## Tests
 
-There are 49 PlayMode tests in `Tests/`, covering:
+There are 51 PlayMode tests. `NightfarerPlaytest` records movement-feel numbers to
+`Logs/nightfarer_playtest.txt` (acceleration, stopping, turning, air control, landing, camera); rerun it after
+tuning to compare. The rest are in `Tests/`, covering:
 - movement, defence, combat, lock-on, skill and ultimate;
 - climbing (hands and feet), super jump, hero landing, side jump, air claw line and momentum, foot IK;
 - spirit springs, flasks, the coat and combat screen effects;

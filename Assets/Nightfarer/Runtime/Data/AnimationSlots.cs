@@ -33,7 +33,7 @@ namespace Subject143.Nightfarer
             "Skill", "SkillFollowUp",
             "Mantle", "Drink", "Ultimate",
             "StepF", "StepB", "StepL", "StepR",
-            "Vault", "SuperJumpCharge", "HeroLand", "SideJumpL", "SideJumpR"
+            "Vault", "SuperJumpCharge", "HeroLand", "SideJumpL", "SideJumpR", "Skid"
         };
 
         /// <summary>Action states that loop and ignore the ActionSpeed multiplier.</summary>

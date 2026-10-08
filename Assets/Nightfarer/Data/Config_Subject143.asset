@@ -19,16 +19,25 @@ MonoBehaviour:
   lockedWalkSpeed: 1.5
   lockedRunSpeed: 3.9
   walkInputThreshold: 0.55
-  acceleration: 42
-  deceleration: 55
-  sprintAcceleration: 24
+  acceleration: 12
+  deceleration: 20
+  sprintAcceleration: 10
   surgeAcceleration: 70
   pivotAngle: 135
   pivotDecelerationMultiplier: 1.6
+  sprintDeceleration: 9
+  surgeDeceleration: 6
+  skidStops: 1
+  skidDeceleration: 9
+  pivotSkidAngle: 120
+  minTurnSpeed: 150
+  turnFalloff: 0.9
+  driftGrip: 0.65
+  driftDrag: 6
   turnSpeed: 1080
   sprintTurnSpeed: 420
   lockedTurnSpeed: 900
-  airTurnSpeed: 180
+  airTurnSpeed: 0
   sprintHoldThreshold: 0.25
   sprintStaminaPerSecond: 6
   surgeEnabled: 1
@@ -39,8 +48,10 @@ MonoBehaviour:
   jumpStaminaCost: 4
   gravity: -26
   maxFallSpeed: -45
-  airAcceleration: 6
+  airAcceleration: 0
   airMinSpeedFraction: 0.55
+  spiritAirAcceleration: 18
+  jumpSquatTime: 0.07
   coyoteTime: 0.12
   superJumpHoldThreshold: 0.16
   superJumpChargeTime: 0.75
@@ -48,6 +59,9 @@ MonoBehaviour:
   superJumpForwardSpeed: 9
   superJumpChargeMoveScale: 0.45
   superJumpStaminaCost: 14
+  launchSpeedGain: 1.9
+  launchMaxSpeed: 28
+  launchFlatten: 0.6
   sideJumpHeight: 0.75
   sideJumpDistance: 3.4
   sideJumpStaminaCost: 10
@@ -65,6 +79,8 @@ MonoBehaviour:
   heroLandMaxHeight: 8
   heroLandRecovery: {x: 0.42, y: 0.75}
   dustLandMinHeight: 0.8
+  landKeepMomentumFraction: 0.6
+  heroLandSlideCarry: 0.85
   evadeStyle: 0
   stepDistance: 3.8
   stepTravelTime: 0.14
@@ -173,6 +189,11 @@ MonoBehaviour:
   mantleBaseDuration: 0.4
   mantleDurationPerMetre: 0.28
   inputBufferTime: 0.35
-  attackFriction: 40
+  attackFriction: 12
+  lightCarryMomentum: 0.3
+  sprintLungeSpeedScale: 1.7
+  knockbackPerSpeed: 0.08
+  baseKnockback: 0.25
+  stepKeepsMomentum: 1
   hitReactDuration: 0.38
   hitReactKnockback: 0.6

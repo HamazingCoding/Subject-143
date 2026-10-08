@@ -29,6 +29,17 @@ namespace Subject143.Nightfarer
         bool hasClaw;
         float primaryWeight, offWeight;
 
+        // Stability for the long claw arm: blend into new pose sources instead of snapping, keep the wrist roll and
+        // the elbow direction continuous (no 180-degree flips), and soften the reach near full extension.
+        object poseSource;
+        float sourceTime;
+        [Tooltip("Seconds to blend into a new pose source (attack start, climb, landing...).")]
+        public float sourceBlendTime = 0.12f;
+        [Tooltip("How fast the wrist roll and elbow direction may turn (per second, exponential).")]
+        public float rollSharpness = 22f, poleSharpness = 16f;
+        class ArmState { public Vector3 edge, pole; public bool init; }
+        readonly ArmState leftArm = new ArmState(), rightArm = new ArmState();
+
         public float RightWeight => rightWeight;
         public float LeftWeight => leftWeight;
 
@@ -207,7 +218,15 @@ namespace Subject143.Nightfarer
             primaryWeight = Mathf.MoveTowards(primaryWeight, tp * globalWeight, weightRate * dt);
             offWeight = Mathf.MoveTowards(offWeight, to * globalWeight, weightRate * dt);
             if (!hasClaw) { clawPrimary = pTarget; clawOff = oTarget; hasClaw = true; }
-            float k = character.State is AttackState || directPose ? 1f : 1f - Mathf.Exp(-poseBlendSpeed * dt);
+            // Exact path following for attacks/abilities, but only after a short blend in from wherever the arm was.
+            if (!ReferenceEquals(poseSource, character.State))
+            {
+                poseSource = character.State;
+                sourceTime = 0f;
+            }
+            sourceTime += dt;
+            bool exact = (character.State is AttackState || directPose) && sourceTime >= sourceBlendTime;
+            float k = exact ? 1f : 1f - Mathf.Exp(-(character.State is AttackState || directPose ? 40f : poseBlendSpeed) * dt);
             clawPrimary = SwingPath.Lerp(clawPrimary, pTarget, k);
             clawOff = SwingPath.Lerp(clawOff, oTarget, k);
             rightWeight = primaryLeft ? offWeight : primaryWeight;
@@ -216,14 +235,16 @@ namespace Subject143.Nightfarer
             Transform space = character.Animator.visualRoot != null ? character.Animator.visualRoot : character.transform;
             if (primaryWeight > 0.001f)
             {
-                if (primaryLeft) PlaceHand(space, lUpper, lLower, lHand, clawPrimary, leftGripRot, leftGripPos, primaryWeight, -1f);
-                else PlaceHand(space, rUpper, rLower, rHand, clawPrimary, rightGripRot, rightGripPos, primaryWeight, 1f);
+                if (primaryLeft) PlaceHand(space, lUpper, lLower, lHand, clawPrimary, leftGripRot, leftGripPos, primaryWeight, -1f, leftArm, dt);
+                else PlaceHand(space, rUpper, rLower, rHand, clawPrimary, rightGripRot, rightGripPos, primaryWeight, 1f, rightArm, dt);
             }
+            else (primaryLeft ? leftArm : rightArm).init = false;
             if (offWeight > 0.001f)
             {
-                if (primaryLeft) PlaceHand(space, rUpper, rLower, rHand, clawOff, rightGripRot, rightGripPos, offWeight, 1f);
-                else PlaceHand(space, lUpper, lLower, lHand, clawOff, leftGripRot, leftGripPos, offWeight, -1f);
+                if (primaryLeft) PlaceHand(space, rUpper, rLower, rHand, clawOff, rightGripRot, rightGripPos, offWeight, 1f, rightArm, dt);
+                else PlaceHand(space, lUpper, lLower, lHand, clawOff, leftGripRot, leftGripPos, offWeight, -1f, leftArm, dt);
             }
+            else (primaryLeft ? rightArm : leftArm).init = false;
         }
 
         /// <summary>
@@ -247,21 +268,42 @@ namespace Subject143.Nightfarer
             float y = s.y - armLength * Mathf.Lerp(0.86f, 0.8f, Mathf.Abs(swing) * 2f) + Mathf.Abs(swing) * 0.12f;
             Vector3 grip = new Vector3(s.x + side * 0.07f, y, z);
             Vector3 blade = new Vector3(side * 0.12f, -1f, -swing * 1.6f - sprint * 0.5f).normalized;   // claws trail the motion
+            // Surge: the mutated arm drags behind him with the claws scraping the ground (less human at speed).
+            float drag = character.IsSurging ? Mathf.InverseLerp(cfg.sprintSpeed, cfg.surgeSpeed, speed) : 0f;
+            if (drag > 0f)
+            {
+                grip = Vector3.Lerp(grip, new Vector3(s.x + side * 0.14f, 0.16f, s.z - 0.28f), drag);
+                blade = Vector3.Slerp(blade, new Vector3(side * 0.1f, -0.85f, -0.5f).normalized, drag);
+            }
             Vector3 edge = Vector3.ProjectOnPlane(new Vector3(0f, 0f, -Mathf.Sign(swing == 0f ? 1f : swing)), blade);
             if (edge.sqrMagnitude < 1e-4f) edge = Vector3.right;
             return new WeaponPose { grip = grip / Mathf.Max(0.01f, rigScale), blade = blade, edge = edge.normalized };
         }
 
-        void PlaceHand(Transform space, Transform upper, Transform lower, Transform hand, WeaponPose pose, Quaternion gripRot, Vector3 gripPos, float weight, float side)
+        void PlaceHand(Transform space, Transform upper, Transform lower, Transform hand, WeaponPose pose, Quaternion gripRot, Vector3 gripPos, float weight, float side, ArmState arm, float dt)
         {
             if (upper == null || hand == null) return;
-            Quaternion frame = space.rotation * Quaternion.LookRotation(pose.blade, pose.edge);   // fingers, thumb side
+            Vector3 blade = space.TransformDirection(pose.blade).normalized;
+            Vector3 edge = Vector3.ProjectOnPlane(space.TransformDirection(pose.edge), blade).normalized;
+            // Wrist roll: turn continuously toward the target roll instead of flipping when a swing reverses.
+            if (arm.init)
+            {
+                Vector3 prev = Vector3.ProjectOnPlane(arm.edge, blade).normalized;
+                if (prev.sqrMagnitude > 0.5f) edge = Vector3.Slerp(prev, edge, 1f - Mathf.Exp(-rollSharpness * dt)).normalized;
+            }
+            if (edge.sqrMagnitude < 0.5f) edge = Vector3.ProjectOnPlane(space.up, blade).normalized;
+            arm.edge = edge;
+            Quaternion frame = Quaternion.LookRotation(blade, edge);   // fingers, thumb side
             Quaternion handRot = frame * Quaternion.Inverse(gripRot);
             Vector3 palm = space.TransformPoint(pose.grip * rigScale);
             Vector3 handPos = palm - handRot * Vector3.Scale(gripPos, hand.lossyScale);
-            Vector3 hint = space.TransformPoint(new Vector3(0.55f * side, 0.7f, -0.3f) * rigScale);
+            // Elbow direction: out, down and back from the shoulder, smoothed so it can't pop to the other side.
+            Vector3 hintDir = (space.TransformPoint(new Vector3(0.55f * side, 0.7f, -0.3f) * rigScale) - upper.position).normalized;
+            if (arm.init) hintDir = Vector3.Slerp(arm.pole, hintDir, 1f - Mathf.Exp(-poleSharpness * dt)).normalized;
+            arm.pole = hintDir;
+            arm.init = true;
             Quaternion animRot = hand.rotation;
-            TwoBoneIK.Solve(upper, lower, hand, handPos, hint, weight);
+            TwoBoneIK.Solve(upper, lower, hand, handPos, upper.position + hintDir, weight, true);
             hand.rotation = Quaternion.Slerp(animRot, handRot, weight);
         }
 
@@ -296,13 +338,20 @@ namespace Subject143.Nightfarer
     public static class TwoBoneIK
     {
         /// <summary>Analytic two-bone IK in world space; blends the result with the animated pose by weight.</summary>
-        public static void Solve(Transform upper, Transform lower, Transform end, Vector3 target, Vector3 hint, float weight)
+        /// <param name="soft">Ease the reach near full extension so the limb never snaps straight (soft IK).</param>
+        public static void Solve(Transform upper, Transform lower, Transform end, Vector3 target, Vector3 hint, float weight, bool soft = false)
         {
             Quaternion upperLocal0 = upper.localRotation, lowerLocal0 = lower.localRotation;
             Vector3 a = upper.position, b = lower.position, c = end.position;
             float l1 = (b - a).magnitude, l2 = (c - b).magnitude;
             Vector3 toTarget = target - a;
-            float d = Mathf.Clamp(toTarget.magnitude, Mathf.Abs(l1 - l2) + 1e-3f, (l1 + l2) * 0.999f);
+            float reach = toTarget.magnitude, max = l1 + l2;
+            if (soft)
+            {
+                float band = 0.08f * max, start = max - band;
+                if (reach > start) reach = start + band * (1f - Mathf.Exp(-(reach - start) / band));
+            }
+            float d = Mathf.Clamp(reach, Mathf.Abs(l1 - l2) + 1e-3f, max * 0.999f);
             Vector3 dir = toTarget.sqrMagnitude > 1e-8f ? toTarget.normalized : (c - a).normalized;
             Vector3 pole = Vector3.ProjectOnPlane(hint - a, dir);
             if (pole.sqrMagnitude < 1e-6f) pole = Vector3.ProjectOnPlane(b - a, dir);

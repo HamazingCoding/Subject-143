@@ -37,6 +37,20 @@ namespace Subject143.Nightfarer
         public override void Tick(float dt)
         {
             base.Tick(dt);
+            if (Cfg.skidStops && C.Motor.Grounded && !C.IsLocked && C.Motor.PlanarSpeed > Cfg.sprintSpeed * 0.85f)
+            {
+                Vector3 move = C.MoveInputWorld();
+                if (move.sqrMagnitude < 0.01f)
+                {
+                    C.ChangeState(new SkidState(C, null));
+                    return;
+                }
+                if (Vector3.Angle(C.Motor.PlanarVelocity, move) > Cfg.pivotSkidAngle)
+                {
+                    C.ChangeState(new SkidState(C, move.normalized));
+                    return;
+                }
+            }
             C.Locomote(dt, 1f, true);
             if (!C.Motor.Grounded && C.Motor.TimeSinceGrounded > Cfg.coyoteTime)
             {
@@ -77,7 +91,7 @@ namespace Subject143.Nightfarer
             C.IsSprinting = false;
             C.CombatPhase = "-";
             float rise = Mathf.Max(0.45f, C.Motor.VerticalVelocity / Mathf.Max(1f, -Cfg.gravity));
-            if (jumped) C.Animator.PlayAction("JumpStart", super ? rise : 0.45f, 0.06f);
+            if (jumped && !(C.Animator.CurrentState == "JumpStart" && !super)) C.Animator.PlayAction("JumpStart", super ? rise : 0.45f, 0.06f);
             else C.Animator.PlayLoop("Fall", 0.2f);
         }
 
@@ -90,11 +104,16 @@ namespace Subject143.Nightfarer
             if (C.PeekBuffer() == NightfarerCharacter.BufferedAction.Skill && C.TrySkill()) return;
 
             Vector3 move = C.MoveInputWorld();
-            Vector3 v = C.Motor.PlanarVelocity + move * (Cfg.airAcceleration * (spirit ? 3f : 1f) * dt);
-            float cap = Mathf.Max(entrySpeed, Cfg.runSpeed * (spirit ? 1.2f : Cfg.airMinSpeedFraction));
-            if (v.magnitude > cap) v = v.normalized * cap;
-            C.Motor.SetPlanarVelocity(v);
-            if (move.sqrMagnitude > 0.02f) C.Motor.FaceDirection(move, Cfg.airTurnSpeed, dt);
+            float airAccel = spirit ? Cfg.spiritAirAcceleration : Cfg.airAcceleration;
+            if (airAccel > 0f)
+            {
+                Vector3 v = C.Motor.PlanarVelocity + move * (airAccel * dt);
+                float cap = Mathf.Max(entrySpeed, Cfg.runSpeed * (spirit ? 1.2f : Cfg.airMinSpeedFraction));
+                if (v.magnitude > cap) v = v.normalized * cap;
+                C.Motor.SetPlanarVelocity(v);
+            }
+            float airTurn = spirit ? Mathf.Max(Cfg.airTurnSpeed, 360f) : Cfg.airTurnSpeed;
+            if (move.sqrMagnitude > 0.02f && airTurn > 0f) C.Motor.FaceDirection(move, airTurn, dt);
 
             // Grab ledges in front while rising slowly, at the apex or falling (Nightreign climbing).
             if (Elapsed > 0.08f && C.Motor.VerticalVelocity < 3.5f && move.sqrMagnitude > 0.02f && C.TryMantle(false)) return;
@@ -139,7 +158,7 @@ namespace Subject143.Nightfarer
         public override void Tick(float dt)
         {
             base.Tick(dt);
-            C.Locomote(dt, 0.6f, true);
+            C.Locomote(dt, C.Motor.PlanarSpeed > Cfg.runSpeed * Cfg.landKeepMomentumFraction ? 1f : 0.6f, true);
             if (Elapsed >= 0.04f && C.TryBufferedGroundAction()) return;
             bool moving = C.MoveInputWorld().sqrMagnitude > 0.01f;
             if (Elapsed >= (moving ? Cfg.softLandRecovery : Cfg.softLandRecovery + 0.2f))
@@ -335,7 +354,8 @@ namespace Subject143.Nightfarer
         readonly Vector3 dir;
         string slot = "StepB";
         float last;
-        bool locked, arrived;
+        bool locked, arrived, wasSurging;
+        float entrySpeed;
         FlashStepVFX vfx;
 
         public FlashStepState(NightfarerCharacter c, Vector3 direction) : base(c)
@@ -355,6 +375,8 @@ namespace Subject143.Nightfarer
 
         public override void Enter()
         {
+            entrySpeed = C.Motor.PlanarSpeed;
+            wasSurging = C.IsSurging;
             C.IsSprinting = false;
             C.IsSurging = false;
             locked = C.IsLocked;
@@ -415,7 +437,10 @@ namespace Subject143.Nightfarer
 
             if (t >= Travel + Cfg.stepRecovery * 0.5f && C.MoveInputWorld().sqrMagnitude > 0.04f)
             {
-                C.Motor.SetPlanarVelocity(C.MoveInputWorld().normalized * Cfg.runSpeed * 0.7f);
+                bool keep = Cfg.stepKeepsMomentum && entrySpeed > Cfg.runSpeed;
+                C.Motor.SetPlanarVelocity(C.MoveInputWorld().normalized * (keep ? entrySpeed : Cfg.runSpeed * 0.7f));
+                C.FaceDirectionInstant(C.MoveInputWorld());
+                if (keep) C.IsSurging = wasSurging;
                 C.ChangeState(new LocomotionState(C));
                 return;
             }
@@ -443,6 +468,7 @@ namespace Subject143.Nightfarer
         int window;
         float lastLunge;
         float chargeTimer, chargeRatio;
+        float entrySpeed, lungeScale = 1f;
         bool charging, chargeDone, holdingAir;
         Queued queued;
 
@@ -468,7 +494,11 @@ namespace Subject143.Nightfarer
             C.CurrentAttack = a;
             C.ComboStep = index + 1;
             C.HasHyperArmor = a.hyperArmor;
-            C.Motor.SetPlanarVelocity(C.Motor.PlanarVelocity * a.carryMomentum);
+            entrySpeed = C.Motor.PlanarSpeed;
+            float carry = kind == AttackKind.Light || kind == AttackKind.FollowUp ? Mathf.Max(a.carryMomentum, Cfg.lightCarryMomentum) : a.carryMomentum;
+            C.Motor.SetPlanarVelocity(C.Motor.PlanarVelocity * carry);
+            if (kind == AttackKind.Sprint)
+                lungeScale = Mathf.Lerp(1f, Cfg.sprintLungeSpeedScale, Mathf.InverseLerp(Cfg.runSpeed, Cfg.surgeSpeed, entrySpeed));
             C.Animator.PlayAction(a.animationSlot, a.duration, 0.06f);
         }
 
@@ -528,7 +558,7 @@ namespace Subject143.Nightfarer
             if (a.lungeDistance > 0f && t > a.lungeStart)
             {
                 float u = Mathf.Clamp01((t - a.lungeStart) / Mathf.Max(0.01f, a.lungeEnd - a.lungeStart));
-                float p = Mathf.SmoothStep(0f, 1f, u) * a.lungeDistance;
+                float p = Mathf.SmoothStep(0f, 1f, u) * a.lungeDistance * lungeScale;
                 float d = p - lastLunge;
                 lastLunge = p;
                 if (C.IsLocked && C.DistanceToLockTarget() < 1.3f) d = 0f;
@@ -592,7 +622,8 @@ namespace Subject143.Nightfarer
             float mul = a.chargeTimeMax > 0f ? Mathf.Lerp(1f, a.chargedDamageMultiplier, chargeRatio) : 1f;
             C.Hitbox?.BeginSwing(new DamageInfo
             {
-                amount = a.damage * mul, poiseDamage = a.poiseDamage * mul, source = C.gameObject, attackName = a.name
+                amount = a.damage * mul, poiseDamage = a.poiseDamage * mul, source = C.gameObject, attackName = a.name,
+                knockback = Cfg.baseKnockback * (kind == AttackKind.Heavy ? 1.8f : 1f) + entrySpeed * Cfg.knockbackPerSpeed,
             }, a.arcReach, a.arcAngle, SegmentMask());
         }
 

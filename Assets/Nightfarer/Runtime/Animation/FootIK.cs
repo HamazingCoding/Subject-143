@@ -30,7 +30,23 @@ namespace Subject143.Nightfarer
         int overrideFrame = -1;
         readonly RaycastHit[] hits = new RaycastHit[8];
 
+        [Header("Impact compression")]
+        [Tooltip("Pelvis drop speed (m/s) per m/s of landing impact.")]
+        public float impactGain = 0.09f;
+        public float springStiffness = 180f;
+        [Range(0f, 1f)] public float springDamping = 0.55f;
+        public float maxCompression = 0.2f;
+        float spring, springVel;
+
         public float Weight => weight;
+        public float Compression => -spring;
+
+        /// <summary>Compress the body on landing (or a jump squat): a pelvis spring that dips and recovers.</summary>
+        public void Impact(float speed)
+        {
+            springVel -= Mathf.Min(Mathf.Abs(speed), 30f) * impactGain;
+            weight = 1f;
+        }
         public float AnkleHeight => ankleHeight;
         public float PelvisOffset => pelvis;
         /// <summary>Gap between each sole and the ground after the last solve (tests/debug).</summary>
@@ -104,7 +120,7 @@ namespace Subject143.Nightfarer
         {
             if (character == null || !character.Motor.Grounded) return false;
             var s = character.State;
-            return s is LocomotionState || s is LandingState || s is HeroLandingState || s is SuperJumpChargeState ||
+            return s is LocomotionState || s is LandingState || s is HeroLandingState || s is SuperJumpChargeState || s is SkidState || s is JumpSquatState ||
                    s is DrinkState || s is AttackState || s is HitReactState || s is AbilityState;
         }
 
@@ -114,6 +130,14 @@ namespace Subject143.Nightfarer
             if (hips == null || lF == null || rF == null) return;
             float dt = Time.deltaTime;
             Vector3 fwd = character != null ? character.transform.forward : transform.forward;
+            if (character != null && character.Motor.Grounded && dt > 0f)
+            {
+                float c = 2f * Mathf.Sqrt(springStiffness) * springDamping;
+                springVel += (-springStiffness * spring - c * springVel) * dt;
+                spring = Mathf.Clamp(spring + springVel * dt, -maxCompression, 0.05f);
+            }
+            else { spring = 0f; springVel = 0f; }
+            if (Mathf.Abs(spring) > 1e-4f) hips.position += Vector3.up * spring;
 
             if (overrideFrame == Time.frameCount && overrideWeight > 0f)
             {

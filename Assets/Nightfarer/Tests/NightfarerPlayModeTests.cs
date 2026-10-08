@@ -352,7 +352,7 @@ namespace Subject143.Nightfarer.Tests
             In.HeavyHeld = false;
             yield return new WaitForSeconds(1.6f);
             Metric($"heavy: {heavy.name}, max charge {maxCharge:P0}, wind-up crept {windStart:F2}s -> {windEnd:F2}s while held (hit at {heavy.hitStart:F2}s), last hit {C.LastHitDealt:F0} (base {heavy.damage})");
-            Assert.That(heavy.name, Does.StartWith("Pouncing Rake"), "original heavy restored");
+            Assert.That(heavy.name, Does.StartWith("Reaver Sweep"), "wide charged sweep");
             Assert.Greater(windEnd - windStart, 0.1f, "keeps winding up slowly while charging (not frozen)");
             Assert.Less(windEnd, heavy.hitStart, "the strike waits for the release");
             Assert.Greater(maxCharge, 0.5f);
@@ -405,7 +405,7 @@ namespace Subject143.Nightfarer.Tests
         public IEnumerator JumpAttack_InAir()
         {
             In.TapJump();
-            yield return Frames(6);
+            yield return new WaitForSeconds(0.15f);   // jump squat, then airborne
             In.TapLight();
             yield return Frames(2);
             Assert.AreEqual(C.Weapon.jumpAttack.name, C.StateName);
@@ -553,7 +553,7 @@ namespace Subject143.Nightfarer.Tests
                 yield return null;
                 yield return null;
                 InputSystem.QueueStateEvent(kb, new KeyboardState());
-                yield return WaitForState("Jump", 0.3f);
+                for (float w = 0f; w < 0.4f && C.StateName != "Jump"; w += Time.deltaTime) yield return null;   // after the jump squat
                 string afterF = C.StateName;
                 yield return new WaitForSeconds(1.0f);
 

@@ -159,7 +159,7 @@ namespace Subject143.Nightfarer.EditorTools
                 kevin.FillLocomotion(feral);
                 foreach (var kv in feralLoco) feral.Set(kv.Key, kv.Value);
             }
-            var feralTraversal = new HashSet<string> { "Mantle", "Vault", "Drink", "SuperJumpCharge", "HeroLand", "SideJumpL", "SideJumpR" };
+            var feralTraversal = new HashSet<string> { "Mantle", "Vault", "Drink", "SuperJumpCharge", "HeroLand", "SideJumpL", "SideJumpR", "Skid" };
             foreach (var kv in combat)
                 if (newFeral || feral.Get(kv.Key) == null || feralTraversal.Contains(kv.Key)) feral.Set(kv.Key, kv.Value);
             EditorUtility.SetDirty(feral);
@@ -273,6 +273,34 @@ namespace Subject143.Nightfarer.EditorTools
             c.heroLandMinHeight = 1.9f;
             c.sideJumpDistance = 3.4f;
             c.sideJumpHeight = 0.75f;
+
+            // Subject 143 feel (design pillars: momentum, commitment, explosive power, controlled instability).
+            c.acceleration = 12f;                 // ~0.35 s to run speed
+            c.deceleration = 20f;                 // braking at run and below
+            c.sprintAcceleration = 10f;
+            c.sprintDeceleration = 9f;            // momentum bleeds at sprint...
+            c.surgeDeceleration = 6f;             // ...and more so at surge
+            c.skidStops = true;
+            c.skidDeceleration = 9f;
+            c.pivotSkidAngle = 120f;
+            c.turnSpeed = 1080f;                  // walk: precise
+            c.minTurnSpeed = 150f;                // surge: committed
+            c.turnFalloff = 0.9f;
+            c.driftGrip = 0.65f;
+            c.driftDrag = 6f;
+            c.airAcceleration = 0f;               // the takeoff vector is final
+            c.airTurnSpeed = 0f;
+            c.jumpSquatTime = 0.07f;
+            c.launchSpeedGain = 1.9f;
+            c.launchMaxSpeed = 28f;
+            c.launchFlatten = 0.6f;
+            c.landKeepMomentumFraction = 0.6f;
+            c.heroLandSlideCarry = 0.85f;
+            c.attackFriction = 12f;
+            c.lightCarryMomentum = 0.3f;
+            c.sprintLungeSpeedScale = 1.7f;
+            c.knockbackPerSpeed = 0.08f;
+            c.stepKeepsMomentum = true;
         }
 
         // ------------------------------------------------------------------ scene helpers

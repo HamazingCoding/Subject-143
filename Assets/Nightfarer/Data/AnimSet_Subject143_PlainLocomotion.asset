@@ -118,3 +118,5 @@ MonoBehaviour:
     clip: {fileID: 7400000, guid: 3ed986e60e3c402468007680c2a92829, type: 2}
   - slot: Light5
     clip: {fileID: 7400000, guid: 847cc5fa2499fa44cabb009af65184f4, type: 2}
+  - slot: Skid
+    clip: {fileID: 7400000, guid: 95b58f80da0f81e4a9cd465b6829a540, type: 2}

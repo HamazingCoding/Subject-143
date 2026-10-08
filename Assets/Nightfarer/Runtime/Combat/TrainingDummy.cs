@@ -21,6 +21,9 @@ namespace Subject143.Nightfarer
         public bool IsAlive => true;
 
         float sinceHit = 99f, flash, stagger, wobble;
+        Vector3 push, pushVel, bodyHome;
+        bool homeSet;
+        public float LastKnockback { get; private set; }
         Vector3 hitDir;
         Renderer[] renderers;
         Color[] baseColors;
@@ -59,6 +62,8 @@ namespace Subject143.Nightfarer
             flash = 0.12f;
             wobble = Mathf.Max(wobble, Mathf.Clamp01(info.amount / 120f) * 0.6f + 0.25f);
             hitDir = info.direction;
+            LastKnockback = info.knockback;
+            if (info.knockback > 0f) pushVel += info.direction * (info.knockback * 9f);   // slide back, then spring home
             DamageNumber.Spawn(info.point + Vector3.up * 0.3f, info.amount, stagger > 1f);
             return true;
         }
@@ -75,6 +80,10 @@ namespace Subject143.Nightfarer
 
             if (body != null)
             {
+                if (!homeSet) { bodyHome = body.localPosition; homeSet = true; }
+                pushVel += (-push * 18f - pushVel * 7f) * dt;
+                push += pushVel * dt;
+                body.localPosition = bodyHome + transform.InverseTransformVector(push);
                 float tilt = (wobble * Mathf.Sin(sinceHit * 28f) * 12f) + (IsStaggered ? 20f : 0f);
                 Vector3 axis = Vector3.Cross(Vector3.up, hitDir.sqrMagnitude > 0f ? hitDir : transform.forward);
                 body.localRotation = Quaternion.AngleAxis(tilt, transform.InverseTransformDirection(axis));

@@ -41,7 +41,7 @@ MonoBehaviour:
   bladeStart: {x: 0, y: 0.15, z: 0}
   bladeEnd: {x: 0, y: 1.3, z: 0}
   bladeRadius: 0.14
-  movesetVersion: 2
+  movesetVersion: 4
   lightChain:
   - name: Beast Swipe
     animationSlot: Light1
@@ -61,6 +61,7 @@ MonoBehaviour:
     carryMomentum: 0
     chargeTimeMax: 0
     chargeHoldPoint: 0.2
+    chargeHoldEnd: -1
     chargedDamageMultiplier: 1.6
     holdUntilGrounded: 0
     swing:
@@ -118,6 +119,7 @@ MonoBehaviour:
     carryMomentum: 0
     chargeTimeMax: 0
     chargeHoldPoint: 0.2
+    chargeHoldEnd: -1
     chargedDamageMultiplier: 1.6
     holdUntilGrounded: 0
     swing:
@@ -184,6 +186,7 @@ MonoBehaviour:
     carryMomentum: 0
     chargeTimeMax: 0
     chargeHoldPoint: 0.2
+    chargeHoldEnd: -1
     chargedDamageMultiplier: 1.6
     holdUntilGrounded: 0
     swing:
@@ -258,6 +261,7 @@ MonoBehaviour:
     carryMomentum: 0
     chargeTimeMax: 0
     chargeHoldPoint: 0.2
+    chargeHoldEnd: -1
     chargedDamageMultiplier: 1.6
     holdUntilGrounded: 0
     swing:
@@ -330,6 +334,7 @@ MonoBehaviour:
     carryMomentum: 0
     chargeTimeMax: 0
     chargeHoldPoint: 0.2
+    chargeHoldEnd: -1
     chargedDamageMultiplier: 1.6
     holdUntilGrounded: 0
     swing:
@@ -385,103 +390,89 @@ MonoBehaviour:
     spaceCrack: 1
     useAnimationEvents: 0
   heavyChain:
-  - name: Savage Lunge (hold to charge)
+  - name: Reaver Sweep (hold to charge)
     animationSlot: Heavy1
-    duration: 0.95
+    duration: 1
     hitStart: 0.42
-    hitEnd: 0.54
+    hitEnd: 0.6
     extraHitWindows: []
     comboWindowStart: 0.21
-    chainTime: 0.64
-    dodgeCancelTime: 0.52
-    moveCancelTime: 0.78
+    chainTime: 0.7
+    dodgeCancelTime: 0.58
+    moveCancelTime: 0.82
     trackingEndTime: 0.16
     trackingSpeed: 900
-    lungeDistance: 2.4
-    lungeStart: 0.3
+    lungeDistance: 1
+    lungeStart: 0.38
     lungeEnd: 0.5
     carryMomentum: 0
-    chargeTimeMax: 0.8
-    chargeHoldPoint: 0.15
-    chargedDamageMultiplier: 1.7
+    chargeTimeMax: 0.9
+    chargeHoldPoint: 0.14
+    chargeHoldEnd: 0.37
+    chargedDamageMultiplier: 1.8
     holdUntilGrounded: 0
     swing:
       keys:
       - t: 0
         grip: {x: -0.32, y: 0.95, z: 0.38}
         blade: {x: -0.15056568, y: -0.4015085, z: 0.9033941}
-      - t: 0.15
-        grip: {x: -0.4, y: 0.55, z: -0.25}
-        blade: {x: -0.30942637, y: -0.61885273, z: -0.7219948}
-      - t: 0.42
-        grip: {x: -0.25, y: 0.8, z: 0.6}
-        blade: {x: 0, y: -0.19996001, z: 0.97980404}
-      - t: 0.5
-        grip: {x: -0.15, y: 1.45, z: 0.6}
-        blade: {x: 0, y: 0.8, z: 0.6}
-      - t: 0.62
-        grip: {x: -0.15, y: 1.65, z: 0.35}
-        blade: {x: 0, y: 0.99450547, z: -0.104684785}
-      - t: 0.82
-        grip: {x: -0.2, y: 1.3, z: 0.3}
-        blade: {x: -0.20739034, y: 0.51847583, z: 0.82956135}
+      - t: 0.14
+        grip: {x: -0.7, y: 1.1, z: -0.2}
+        blade: {x: -0.8825961, y: 0.051917415, z: -0.4672567}
+      - t: 0.37
+        grip: {x: -0.75, y: 1.2, z: -0.5}
+        blade: {x: -0.55988526, y: 0.15269598, z: -0.81437856}
+      - t: 0.45
+        grip: {x: -0.55, y: 1.05, z: 0.45}
+        blade: {x: -0.34528452, y: -0.049326364, z: 0.9372009}
+      - t: 0.51
+        grip: {x: 0, y: 1, z: 0.8}
+        blade: {x: 0.35109007, y: -0.08024915, z: 0.9328965}
+      - t: 0.57
+        grip: {x: 0.55, y: 0.98, z: 0.45}
+        blade: {x: 0.9621024, y: -0.10127394, z: 0.25318485}
+      - t: 0.64
+        grip: {x: 0.7, y: 0.98, z: -0.1}
+        blade: {x: 0.77151674, y: -0.15430336, z: -0.6172134}
+      - t: 0.85
+        grip: {x: 0.3, y: 0.95, z: 0.15}
+        blade: {x: 0.5050762, y: -0.30304578, z: 0.80812204}
       - t: 1
         grip: {x: -0.32, y: 0.95, z: 0.38}
         blade: {x: -0.15056568, y: -0.4015085, z: 0.9033941}
     swingOff:
-      keys:
-      - t: 0
-        grip: {x: 0.32, y: 0.95, z: 0.38}
-        blade: {x: 0.15056568, y: -0.4015085, z: 0.9033941}
-      - t: 0.15
-        grip: {x: 0.4, y: 0.55, z: -0.25}
-        blade: {x: 0.30942637, y: -0.61885273, z: -0.7219948}
-      - t: 0.42
-        grip: {x: 0.25, y: 0.8, z: 0.6}
-        blade: {x: -0, y: -0.19996001, z: 0.97980404}
-      - t: 0.5
-        grip: {x: 0.15, y: 1.45, z: 0.6}
-        blade: {x: -0, y: 0.8, z: 0.6}
-      - t: 0.62
-        grip: {x: 0.15, y: 1.65, z: 0.35}
-        blade: {x: -0, y: 0.99450547, z: -0.104684785}
-      - t: 0.82
-        grip: {x: 0.2, y: 1.3, z: 0.3}
-        blade: {x: 0.20739034, y: 0.51847583, z: 0.82956135}
-      - t: 1
-        grip: {x: 0.32, y: 0.95, z: 0.38}
-        blade: {x: 0.15056568, y: -0.4015085, z: 0.9033941}
-    hand: 2
-    arcReach: 1.25
-    arcAngle: 110
+      keys: []
+    hand: 0
+    arcReach: 1.5
+    arcAngle: 210
     staminaCost: 20
-    damage: 120
+    damage: 125
     poiseDamage: 55
-    hitStopTime: 0.074999996
+    hitStopTime: 0.0775
     hyperArmor: 1
     screenBlur: 0.06
     speedLines: 0.5
     spaceCrack: 1
     useAnimationEvents: 0
-  - name: Beast Maul (hold to charge)
+  - name: Thorn Whirl (hold to charge)
     animationSlot: Heavy2
-    duration: 1
-    hitStart: 0.36
-    hitEnd: 0.44
-    extraHitWindows:
-    - {x: 0.56, y: 0.64}
-    comboWindowStart: 0.18
-    chainTime: 0.72
-    dodgeCancelTime: 0.68
-    moveCancelTime: 0.84
+    duration: 0.9
+    hitStart: 0.32
+    hitEnd: 0.5
+    extraHitWindows: []
+    comboWindowStart: 0.16
+    chainTime: 0.6
+    dodgeCancelTime: 0.48
+    moveCancelTime: 0.74
     trackingEndTime: 0.16
     trackingSpeed: 900
-    lungeDistance: 1.2
+    lungeDistance: 0.8
     lungeStart: 0.02
-    lungeEnd: 0.39600003
+    lungeEnd: 0.352
     carryMomentum: 0
     chargeTimeMax: 0.8
-    chargeHoldPoint: 0.15
+    chargeHoldPoint: 0.14
+    chargeHoldEnd: 0.27
     chargedDamageMultiplier: 1.6
     holdUntilGrounded: 0
     swing:
@@ -489,48 +480,54 @@ MonoBehaviour:
       - t: 0
         grip: {x: -0.32, y: 0.95, z: 0.38}
         blade: {x: -0.15056568, y: -0.4015085, z: 0.9033941}
-      - t: 0.2
-        grip: {x: -0.3, y: 1.85, z: 0}
-        blade: {x: -0.10050379, y: 0.70352644, z: -0.70352644}
-      - t: 0.36
-        grip: {x: -0.2, y: 1.2, z: 0.6}
-        blade: {x: 0, y: 0.19996001, z: 0.97980404}
-      - t: 0.44
-        grip: {x: -0.15, y: 0.45, z: 0.55}
-        blade: {x: 0, y: -0.95358264, z: 0.30113137}
-      - t: 0.6
-        grip: {x: -0.4, y: 0.9, z: 0.1}
-        blade: {x: -0.42163703, y: -0.52704626, z: 0.73786473}
+      - t: 0.25
+        grip: {x: -0.6, y: 1.1, z: -0.2}
+        blade: {x: -0.91381156, y: 0, z: -0.40613848}
+      - t: 0.38
+        grip: {x: -0.55, y: 1.05, z: 0.4}
+        blade: {x: -0.6, y: 0, z: 0.8}
+      - t: 0.46
+        grip: {x: 0, y: 1, z: 0.65}
+        blade: {x: 0.30113137, y: 0, z: 0.95358264}
+      - t: 0.55
+        grip: {x: 0.4, y: 1, z: 0.4}
+        blade: {x: 0.91381156, y: 0, z: 0.40613848}
+      - t: 0.8
+        grip: {x: -0.2, y: 1, z: 0.3}
+        blade: {x: -0.39801487, y: -0.19900744, z: 0.89553344}
       - t: 1
         grip: {x: -0.32, y: 0.95, z: 0.38}
         blade: {x: -0.15056568, y: -0.4015085, z: 0.9033941}
     swingOff:
       keys:
       - t: 0
-        grip: {x: 0.24, y: 1.02, z: 0.28}
-        blade: {x: 0.15120693, y: 0.20160922, z: 0.96772426}
-      - t: 0.3
-        grip: {x: 0.3, y: 1.85, z: 0}
-        blade: {x: 0.10050379, y: 0.70352644, z: -0.70352644}
-      - t: 0.56
-        grip: {x: 0.2, y: 1.2, z: 0.6}
-        blade: {x: 0, y: 0.19996001, z: 0.97980404}
-      - t: 0.64
-        grip: {x: 0.15, y: 0.45, z: 0.55}
-        blade: {x: 0, y: -0.95358264, z: 0.30113137}
-      - t: 0.85
-        grip: {x: 0.2, y: 0.9, z: 0.3}
-        blade: {x: 0.20492622, y: 0.10246311, z: 0.9733995}
+        grip: {x: 0.32, y: 0.95, z: 0.38}
+        blade: {x: 0.15056568, y: -0.4015085, z: 0.9033941}
+      - t: 0.25
+        grip: {x: 0.6, y: 1.1, z: -0.2}
+        blade: {x: 0.91381156, y: 0, z: -0.40613848}
+      - t: 0.38
+        grip: {x: 0.55, y: 1.05, z: 0.4}
+        blade: {x: 0.6, y: 0, z: 0.8}
+      - t: 0.46
+        grip: {x: -0, y: 1, z: 0.65}
+        blade: {x: -0.30113137, y: 0, z: 0.95358264}
+      - t: 0.55
+        grip: {x: -0.4, y: 1, z: 0.4}
+        blade: {x: -0.91381156, y: 0, z: 0.40613848}
+      - t: 0.8
+        grip: {x: 0.2, y: 1, z: 0.3}
+        blade: {x: 0.39801487, y: -0.19900744, z: 0.89553344}
       - t: 1
-        grip: {x: 0.24, y: 1.02, z: 0.28}
-        blade: {x: 0.15120693, y: 0.20160922, z: 0.96772426}
+        grip: {x: 0.32, y: 0.95, z: 0.38}
+        blade: {x: 0.15056568, y: -0.4015085, z: 0.9033941}
     hand: 2
     arcReach: 1.25
-    arcAngle: 120
-    staminaCost: 22
-    damage: 75
-    poiseDamage: 40
-    hitStopTime: 0.0525
+    arcAngle: 360
+    staminaCost: 20
+    damage: 110
+    poiseDamage: 50
+    hitStopTime: 0.07
     hyperArmor: 1
     screenBlur: 0.06
     speedLines: 0.5
@@ -555,6 +552,7 @@ MonoBehaviour:
     carryMomentum: 0.6
     chargeTimeMax: 0
     chargeHoldPoint: 0.2
+    chargeHoldEnd: -1
     chargedDamageMultiplier: 1.6
     holdUntilGrounded: 0
     swing:
@@ -610,6 +608,7 @@ MonoBehaviour:
     carryMomentum: 1
     chargeTimeMax: 0
     chargeHoldPoint: 0.2
+    chargeHoldEnd: -1
     chargedDamageMultiplier: 1.6
     holdUntilGrounded: 1
     swing:
@@ -683,6 +682,7 @@ MonoBehaviour:
     carryMomentum: 0
     chargeTimeMax: 0
     chargeHoldPoint: 0.2
+    chargeHoldEnd: -1
     chargedDamageMultiplier: 1.6
     holdUntilGrounded: 0
     swing:
@@ -750,6 +750,7 @@ MonoBehaviour:
     carryMomentum: 0
     chargeTimeMax: 0
     chargeHoldPoint: 0.2
+    chargeHoldEnd: -1
     chargedDamageMultiplier: 1.6
     holdUntilGrounded: 0
     swing:

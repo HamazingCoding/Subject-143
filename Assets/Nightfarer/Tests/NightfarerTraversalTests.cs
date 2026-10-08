@@ -245,7 +245,9 @@ namespace Subject143.Nightfarer.Tests
             Warp(new Vector3(0f, 0.05f, -6f), Vector3.forward);
             yield return Frames(5);
             In.TapJump();
-            yield return Frames(3);
+            yield return Frames(2);
+            Assert.AreEqual("Jump Squat", C.StateName, "a brief crouch before every jump");
+            for (float w = 0f; w < 0.4f && C.StateName != "Jump"; w += Time.deltaTime) yield return null;
             Assert.AreEqual("Jump", C.StateName);
             yield return WaitForState("Locomotion", 2f);
             yield return new WaitForSeconds(0.3f);
@@ -424,8 +426,8 @@ namespace Subject143.Nightfarer.Tests
             Assert.IsTrue(charging);
             Assert.Greater(minSpeed, Cfg.surgeSpeed * 0.9f, "no slowdown");
             Assert.AreEqual("Locomotion", anim, "no crouch animation");
-            Assert.Greater(peak - y0, 4f, "the big jump still happens");
-            Assert.Greater(airSpeed, Cfg.surgeSpeed * 0.9f);
+            Assert.Greater(peak - y0, 2.5f, "the big jump still happens (flatter at surge speed)");
+            Assert.Greater(airSpeed, Cfg.surgeSpeed * 1.5f, "a sprint launch multiplies the speed he built");
         }
 
         // ------------------------------------------------------------------ hair

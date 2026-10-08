@@ -30,6 +30,25 @@ namespace Subject143.Nightfarer
         [Tooltip("Reversals sharper than this angle brake first (pivot).")]
         public float pivotAngle = 135f;
         public float pivotDecelerationMultiplier = 1.6f;
+        [Tooltip("Braking when input is released at sprint / surge speed (m/s^2). Run and below use 'deceleration'. " +
+                 "Low values = he carries his momentum.")]
+        public float sprintDeceleration = 45f;
+        public float surgeDeceleration = 45f;
+
+        [Header("Momentum (Subject 143 feel)")]
+        [Tooltip("Releasing input at sprint speed or above skids to a stop (feet plant, lean back, dust).")]
+        public bool skidStops = false;
+        public float skidDeceleration = 9f;
+        [Tooltip("A reversal sharper than this at sprint speed or above becomes a pivot-skid: brake, plant, relaunch.")]
+        public float pivotSkidAngle = 120f;
+        [Tooltip("Turn rate at surge speed (deg/s). The turn rate falls from turnSpeed at walk to this as speed rises.")]
+        public float minTurnSpeed = 150f;
+        [Tooltip("Shape of the turn-rate falloff with speed (1 = linear, higher = holds agility longer).")]
+        public float turnFalloff = 1.3f;
+        [Tooltip("Above run speed the velocity follows the body's facing at this fraction of the turn rate (drift).")]
+        [Range(0.1f, 1f)] public float driftGrip = 0.65f;
+        [Tooltip("Speed lost per second while sliding sideways (scaled by the drift angle).")]
+        public float driftDrag = 6f;
 
         [Header("Turning (deg/s)")]
         public float turnSpeed = 900f;
@@ -54,6 +73,10 @@ namespace Subject143.Nightfarer
         public float airAcceleration = 6f;
         [Tooltip("Air speed cap as a fraction of run speed when the jump started slower than that.")]
         public float airMinSpeedFraction = 0.55f;
+        [Tooltip("Steering in a spirit spring launch (Nightreign-style air steering).")]
+        public float spiritAirAcceleration = 18f;
+        [Tooltip("Crouch before a normal jump leaves the ground (anticipation).")]
+        public float jumpSquatTime = 0f;
         public float coyoteTime = 0.12f;
 
         [Header("Super jump (hold Jump, release to spring)")]
@@ -67,6 +90,11 @@ namespace Subject143.Nightfarer
         [Tooltip("Speed scale while charging and moving (stationary = crouch in place).")]
         public float superJumpChargeMoveScale = 0.45f;
         public float superJumpStaminaCost = 14f;
+        [Tooltip("Sprint launches: running speed is multiplied by up to this at full charge (kinetic energy into distance).")]
+        public float launchSpeedGain = 1.9f;
+        public float launchMaxSpeed = 28f;
+        [Tooltip("Faster launches fly flatter: height scale at surge speed.")]
+        public float launchFlatten = 0.6f;
 
         [Header("Side jump (locked on / out of combat actions)")]
         public float sideJumpHeight = 0.75f;
@@ -96,6 +124,10 @@ namespace Subject143.Nightfarer
         public Vector2 heroLandRecovery = new Vector2(0.42f, 0.75f);
         [Tooltip("Normal landings from at least this high shake the camera a little and kick up dust.")]
         public float dustLandMinHeight = 0.8f;
+        [Tooltip("Landing moving faster than this fraction of run speed keeps going (skid / slide) instead of stopping dead.")]
+        public float landKeepMomentumFraction = 0.6f;
+        [Tooltip("Horizontal speed kept through a moving hero landing.")]
+        public float heroLandSlideCarry = 0.85f;
 
         [Header("Evade style")]
         [Tooltip("FlashStep: Bloodhound's-Step-like displacement. Roll: classic dodge roll + backstep.")]
@@ -173,6 +205,15 @@ namespace Subject143.Nightfarer
         public float inputBufferTime = 0.35f;
         [Tooltip("Planar braking applied while attacking (m/s^2).")]
         public float attackFriction = 30f;
+        [Tooltip("Approach speed kept into light attacks (heavier attacks use their own carryMomentum).")]
+        [Range(0f, 1f)] public float lightCarryMomentum = 0f;
+        [Tooltip("Sprint attack lunge multiplier at surge speed (scales with approach speed).")]
+        public float sprintLungeSpeedScale = 1f;
+        [Tooltip("Knockback (m) added per m/s of approach speed.")]
+        public float knockbackPerSpeed = 0f;
+        public float baseKnockback = 0.25f;
+        [Tooltip("A flash step out of a sprint keeps the sprint speed afterwards.")]
+        public bool stepKeepsMomentum = false;
         public float hitReactDuration = 0.45f;
         public float hitReactKnockback = 0.8f;
     }

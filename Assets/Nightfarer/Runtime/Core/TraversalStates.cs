@@ -178,8 +178,10 @@ namespace Subject143.Nightfarer
 
         public SuperJumpChargeState(NightfarerCharacter c, bool running = false) : base(c) { this.running = running; }
         public override string Name => "Super Jump Charge";
-        /// <summary>Charging on the run (surge sprint): full speed, no crouch.</summary>
+        /// <summary>Charging on the run (sprint / surge): full speed, no crouch.</summary>
         public bool Running => running;
+        /// <summary>Planar speed given by the last launch (tests / debug).</summary>
+        public static float LaunchSpeed { get; private set; }
         public float Charge => Mathf.Clamp01(Elapsed / Mathf.Max(0.05f, Cfg.superJumpChargeTime));
 
         public override void Enter()
@@ -238,11 +240,18 @@ namespace Subject143.Nightfarer
             if (!C.Vitals.TryConsume(Cfg.superJumpStaminaCost)) charge = 0f;
             float h = Mathf.Lerp(Cfg.jumpHeight * 1.5f, Cfg.superJumpHeight, charge);
             Vector3 move = C.MoveInputWorld();
-            if (move.sqrMagnitude > 0.02f)
+            float now = C.Motor.PlanarSpeed;
+            if (move.sqrMagnitude > 0.02f || now > Cfg.runSpeed)
             {
-                float speed = Mathf.Max(C.Motor.PlanarSpeed, Mathf.Lerp(Cfg.runSpeed, Cfg.superJumpForwardSpeed, charge));
-                C.Motor.SetPlanarVelocity(move.normalized * speed);
-                C.Motor.FaceDirection(move, 0f, 0f);
+                // Sprint launch: the speed he has built is multiplied into the launch (kinetic energy into distance),
+                // plus the charge's own push; faster launches fly flatter and further.
+                Vector3 dir = running && now > 0.5f ? C.Motor.PlanarVelocity / now : move.normalized;
+                float speed = now * Mathf.Lerp(1f, Cfg.launchSpeedGain, charge) + Mathf.Lerp(Cfg.runSpeed * 0.5f, Cfg.superJumpForwardSpeed, charge);
+                speed = Mathf.Min(speed, Cfg.launchMaxSpeed);
+                h *= Mathf.Lerp(1f, Cfg.launchFlatten, Mathf.InverseLerp(Cfg.runSpeed, Cfg.surgeSpeed, now));
+                C.Motor.SetPlanarVelocity(dir * speed);
+                C.Motor.FaceDirection(dir, 0f, 0f);
+                LaunchSpeed = speed;
             }
             else C.Motor.SetPlanarVelocity(C.Motor.PlanarVelocity * 0.3f);
             C.Motor.Jump(h);
@@ -265,6 +274,8 @@ namespace Subject143.Nightfarer
         readonly float severity;
         float duration;
         Vector3 handPoint, handFingers;
+        bool slide;
+        float nextSpark;
 
         public HeroLandingState(NightfarerCharacter c, float fallHeight) : base(c)
         {
@@ -280,7 +291,9 @@ namespace Subject143.Nightfarer
             C.IsSprinting = false;
             C.IsSurging = false;
             duration = Mathf.Lerp(Cfg.heroLandRecovery.x, Cfg.heroLandRecovery.y, severity);
-            C.Motor.SetPlanarVelocity(C.Motor.PlanarVelocity * 0.1f);
+            // Coming down fast across the ground he slides on in the crouch (claw dragging); straight drops stop dead.
+            slide = C.Motor.PlanarSpeed > Cfg.runSpeed * Cfg.landKeepMomentumFraction;
+            C.Motor.SetPlanarVelocity(C.Motor.PlanarVelocity * (slide ? Cfg.heroLandSlideCarry : 0.1f));
             C.Animator.PlayAction("HeroLand", duration, 0.02f);
             C.CombatPhase = "Landing";
 
@@ -309,9 +322,33 @@ namespace Subject143.Nightfarer
                 t.forward + Vector3.up * 0.6f - t.right * 0.2f, t.forward - Vector3.up * 0.55f, 0f, 0.01f);
         }
 
+        public bool Sliding => slide;
+
         public override void Tick(float dt)
         {
             base.Tick(dt);
+            if (slide)
+            {
+                Vector3 v = C.Motor.PlanarVelocity;
+                float s = Mathf.Max(0f, v.magnitude - Cfg.skidDeceleration * dt);
+                C.Motor.SetPlanarVelocity(v.sqrMagnitude > 1e-4f ? v.normalized * s : Vector3.zero);
+                // The planted claw drags along the ground with him.
+                bool primaryLeft = C.Weapon == null || C.Weapon.primaryHand == HumanBodyBones.LeftHand;
+                Vector3 probe = C.transform.position + C.transform.forward * 0.3f + C.transform.right * (primaryLeft ? -0.2f : 0.2f) + Vector3.up * 0.5f;
+                handPoint = Physics.Raycast(probe, Vector3.down, out var hit, 1.2f, ~0, QueryTriggerInteraction.Ignore) && !hit.collider.transform.IsChildOf(C.transform)
+                    ? hit.point : new Vector3(probe.x, C.transform.position.y, probe.z);
+                if (s > 1f && Elapsed >= nextSpark)
+                {
+                    nextSpark = Elapsed + 0.04f;
+                    ClawSparks.Emit(handPoint + Vector3.up * 0.02f, -v.normalized, 3);
+                    GroundImpact.Puff(C.transform.position, 0.35f);
+                }
+                if (Elapsed >= duration * 0.35f && C.MoveInputWorld().sqrMagnitude > 0.04f && s > Cfg.runSpeed * 0.5f)
+                {
+                    C.ChangeState(new LocomotionState(C));   // spring out of the slide, keeping the speed
+                    return;
+                }
+            }
             PlantFeet();
             if (Elapsed >= duration * 0.35f && C.PeekBuffer() == NightfarerCharacter.BufferedAction.Dodge && C.TryDodge()) return;
             if (Elapsed >= duration * 0.55f)
@@ -410,5 +447,120 @@ namespace Subject143.Nightfarer
         public override void OnLanded(float fallHeight, float impactSpeed) => C.ChangeState(new LandingState(C, fallHeight));
 
         public override void Exit() => C.IsInvulnerable = false;
+    }
+
+    // ------------------------------------------------------------------ Skid / pivot-skid
+
+    /// <summary>
+    /// Letting go at sprint speed (or reversing hard) doesn't stop him on a dime: he plants his feet, leans back and
+    /// skids, kicking up dust, until the momentum bleeds off. A pivot-skid then relaunches him the new way. Flash
+    /// step, attacks, jumps and skills cancel it, so combat stays responsive.
+    /// </summary>
+    public class SkidState : NightfarerState
+    {
+        readonly Vector3? pivot;
+        Vector3 dir;
+        bool wasSurging;
+        float nextPuff;
+
+        public SkidState(NightfarerCharacter c, Vector3? pivotDirection) : base(c) { pivot = pivotDirection; }
+
+        public override string Name => pivot.HasValue ? "Pivot Skid" : "Skid";
+        public bool IsPivot => pivot.HasValue;
+
+        public override void Enter()
+        {
+            Vector3 v = C.Motor.PlanarVelocity;
+            dir = v.sqrMagnitude > 0.01f ? v.normalized : C.transform.forward;
+            wasSurging = C.IsSurging;
+            C.IsSprinting = false;
+            C.IsSurging = false;
+            C.Motor.FaceDirection(dir, 0f, 0f);
+            C.Animator.PlayAction("Skid", 0.9f, 0.06f);
+            C.CombatPhase = "-";
+            if (C.cameraRig != null) C.cameraRig.Shake(0.02f, 0.2f);
+        }
+
+        public override void Tick(float dt)
+        {
+            base.Tick(dt);
+            Vector3 v = C.Motor.PlanarVelocity;
+            float s = Mathf.Max(0f, v.magnitude - Cfg.skidDeceleration * dt);
+            C.Motor.SetPlanarVelocity(dir * s);
+            C.MovementMode = Name;
+
+            // Feet planted ahead of the hips, knees bent: the body braces against its own momentum.
+            if (C.FootIK != null)
+            {
+                Transform t = C.transform;
+                float w = Mathf.Clamp01(Elapsed / 0.08f);
+                C.FootIK.SetPlant(t.position + dir * 0.22f - t.right * 0.11f, t.position + dir * 0.08f + t.right * 0.11f, w,
+                    dir + Vector3.up * 0.5f, dir + Vector3.up * 0.5f);
+            }
+            if (Elapsed >= nextPuff && s > 1f)
+            {
+                nextPuff = Elapsed + 0.06f;
+                GroundImpact.Puff(C.transform.position + dir * 0.2f, 0.3f + 0.04f * s);
+            }
+
+            if (!C.Motor.Grounded && C.Motor.TimeSinceGrounded > Cfg.coyoteTime)
+            {
+                C.ChangeState(new AirborneState(C, false));
+                return;
+            }
+            if (C.PeekBuffer() != NightfarerCharacter.BufferedAction.None && C.TryBufferedGroundAction()) return;
+
+            Vector3 move = C.MoveInputWorld();
+            if (pivot.HasValue)
+            {
+                if (s <= Cfg.runSpeed * 0.4f)
+                {
+                    // Plant and relaunch the new way.
+                    Vector3 to = move.sqrMagnitude > 0.01f ? move.normalized : pivot.Value;
+                    C.Motor.FaceDirection(to, 0f, 0f);
+                    C.Motor.SetPlanarVelocity(to * Cfg.runSpeed * 0.9f);
+                    if (wasSurging) C.IsSurging = true;
+                    GroundImpact.Puff(C.transform.position, 0.6f);
+                    C.ChangeState(new LocomotionState(C));
+                }
+                return;
+            }
+            // Pushing on in roughly the same direction picks the run back up with the speed that's left.
+            if (Elapsed > 0.1f && move.sqrMagnitude > 0.01f && Vector3.Angle(move, dir) < 60f)
+            {
+                C.ChangeState(new LocomotionState(C));
+                return;
+            }
+            if (s <= Cfg.runSpeed * 0.5f) C.ChangeState(new LocomotionState(C));
+        }
+    }
+
+    // ------------------------------------------------------------------ Jump squat
+
+    /// <summary>A brief crouch before a normal jump leaves the ground: the body loads, then springs.</summary>
+    public class JumpSquatState : NightfarerState
+    {
+        readonly bool momentum;
+
+        public JumpSquatState(NightfarerCharacter c, bool momentum) : base(c) { this.momentum = momentum; }
+        public override string Name => "Jump Squat";
+
+        public override void Enter()
+        {
+            C.Animator.PlayAction("JumpStart", Cfg.jumpSquatTime + 0.45f, 0.03f);
+            if (C.FootIK != null) C.FootIK.Impact(4f);
+            C.CombatPhase = "-";
+        }
+
+        public override void Tick(float dt)
+        {
+            base.Tick(dt);
+            if (!C.Motor.Grounded && C.Motor.TimeSinceGrounded > Cfg.coyoteTime)
+            {
+                C.ChangeState(new AirborneState(C, false));
+                return;
+            }
+            if (Elapsed >= Cfg.jumpSquatTime) C.LaunchJump(momentum);
+        }
     }
 }

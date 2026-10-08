@@ -38,17 +38,38 @@ namespace Subject143.Nightfarer
         public float baseFov = 55f;
         public float sprintFovBonus = 5f;
         public float surgeFovBonus = 9f;
+        [Tooltip("Drive the FOV from actual speed (calm -> fluid -> aggressive) instead of the sprint/surge flags.")]
+        public bool fovBySpeed = true;
+        [Tooltip("FOV at walk, run, sprint and surge speed (interpolated by speed).")]
+        public Vector4 speedFov = new Vector4(55f, 58f, 63f, 70f);
+
+        [Header("Speed feel")]
+        [Tooltip("Extra camera distance at surge speed.")]
+        public float speedPullBack = 0.6f;
+        [Tooltip("Roll into turns at surge speed (degrees, at the fastest turns).")]
+        public float turnRoll = 2f;
+        [Tooltip("Camera drop per m/s of landing impact (metres).")]
+        public float landingDipPerSpeed = 0.018f;
+        public float maxLandingDip = 0.3f;
 
         [Header("Options")]
         public bool invertY;
 
         float yaw, pitch = 12f, currentDistance;
+        float pull, roll, lastHeading, dip, dipVel;
+        bool headingInit;
         float shakeAmplitude, shakeTime, shakeDuration;
         Vector3 pivot;
         float switchCooldown;
         bool recentering;
 
         public float Yaw => yaw;
+        public float CurrentFov => cam != null ? cam.fieldOfView : baseFov;
+        public float Roll => roll;
+        public float Dip => dip;
+
+        /// <summary>Drop the camera on landing in proportion to the impact, then spring back.</summary>
+        public void LandingDip(float impactSpeed) => dipVel -= Mathf.Min(Mathf.Abs(impactSpeed) * landingDipPerSpeed * 6f, maxLandingDip * 6f);
 
         /// <summary>Brief positional shake (hits, ultimates, heavy landings).</summary>
         public void Shake(float amplitude, float duration)
@@ -88,6 +109,21 @@ namespace Subject143.Nightfarer
             var lockOn = character.LockOn;
             var target = lockOn != null ? lockOn.Current : null;
 
+            // Speed feel: pull back with speed, roll into hard turns at surge, dip on landings.
+            var cfgSpeed = character.Config;
+            float spd = character.Motor.PlanarSpeed;
+            float fast01 = cfgSpeed != null ? Mathf.InverseLerp(cfgSpeed.runSpeed, cfgSpeed.surgeSpeed, spd) : 0f;
+            pull = Mathf.Lerp(pull, speedPullBack * fast01, 1f - Mathf.Exp(-3f * dt));
+            Vector3 pv = character.Motor.PlanarVelocity;
+            float heading = pv.sqrMagnitude > 0.25f ? Mathf.Atan2(pv.x, pv.z) * Mathf.Rad2Deg : lastHeading;
+            float rate = headingInit && dt > 0f ? Mathf.DeltaAngle(lastHeading, heading) / dt : 0f;
+            lastHeading = heading; headingInit = true;
+            float surge01 = cfgSpeed != null ? Mathf.InverseLerp(cfgSpeed.sprintSpeed, cfgSpeed.surgeSpeed, spd) : 0f;
+            float rollTarget = Mathf.Clamp(-rate * 0.02f, -turnRoll, turnRoll) * surge01;
+            roll = Mathf.Lerp(roll, rollTarget, 1f - Mathf.Exp(-4f * dt));
+            dipVel += (-140f * dip - 2f * Mathf.Sqrt(140f) * 0.7f * dipVel) * dt;
+            dip = Mathf.Clamp(dip + dipVel * dt, -maxLandingDip, maxLandingDip);
+
             Vector3 desiredPivot = character.transform.position + Vector3.up * pivotHeight;
             pivot = Vector3.Lerp(pivot, desiredPivot, 1f - Mathf.Exp(-followSharpness * dt));
 
@@ -125,8 +161,8 @@ namespace Subject143.Nightfarer
                 }
             }
 
-            Quaternion rot = Quaternion.Euler(pitch, yaw, 0f);
-            float wanted = target != null ? lockedDistance : distance;
+            Quaternion rot = Quaternion.Euler(pitch, yaw, roll);
+            float wanted = (target != null ? lockedDistance : distance) + pull;
             float allowed = wanted;
             Vector3 back = rot * Vector3.back;
             foreach (var h in Physics.SphereCastAll(pivot, collisionRadius, back, wanted, collisionMask, QueryTriggerInteraction.Ignore))
@@ -146,11 +182,19 @@ namespace Subject143.Nightfarer
                 float t = Time.unscaledTime * 35f;
                 shake = rot * new Vector3(Mathf.PerlinNoise(t, 0.3f) - 0.5f, Mathf.PerlinNoise(0.7f, t) - 0.5f, 0f) * (2f * shakeAmplitude * fall);
             }
-            transform.SetPositionAndRotation(pivot + back * currentDistance + shake, rot);
+            transform.SetPositionAndRotation(pivot + back * currentDistance + shake + Vector3.up * dip, rot);
 
             if (cam != null)
             {
                 float fov = baseFov + (character.IsSurging ? surgeFovBonus : character.IsSprinting ? sprintFovBonus : 0f);
+                if (fovBySpeed && cfgSpeed != null)
+                {
+                    float tier = character.SpeedTier(spd);   // 1 walk, 2 run, 3 sprint, 4 surge
+                    fov = tier <= 1f ? speedFov.x
+                        : tier <= 2f ? Mathf.Lerp(speedFov.x, speedFov.y, tier - 1f)
+                        : tier <= 3f ? Mathf.Lerp(speedFov.y, speedFov.z, tier - 2f)
+                        : Mathf.Lerp(speedFov.z, speedFov.w, tier - 3f);
+                }
                 cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, fov, 1f - Mathf.Exp(-5f * dt));
             }
         }
